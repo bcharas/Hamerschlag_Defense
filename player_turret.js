@@ -59,19 +59,23 @@ function Projectile(launch_x, launch_y, target_x, target_y) {
 	this.up_y = this.y - this.y_speed;
 	
 	this.collision_check = function() {
-		for (var i = 0; i < field.students; i++) {
+		for (var i = 0; i < field.students_seen; i++) {
 			if (field.students[String(i)] !== undefined) {
 				var this_student = field.students[String(i)];
-				if ((this.new_x >= this_student.x) && (this.new_x <= (this_student.x + this_student.size))){
-					if (launch_y <= target_y) {
-						//down_y
-						if ((this.down_y >= this_student.y) && (this.down_y <= this_student.y + this_student.size)){
+				console.log("other test");
+				if ((this.x >= this_student.x) && (this.x <= (this_student.x + this_student.size))){	
+					console.log("test");
+					if (this.launch_y <= this.target_y) {
+						console.log("down_y");
+						if ((this.y >= this_student.y) && (this.y <= (this_student.y + this_student.size))){	
+							console.log("should have collided...");
 							collide(this, this_student);
 							break;
 						}
 					
 					}
-					else if ((this.up_y >= this_student.y) && (this.up_y <= this_student.y + this_student.size)) {
+					else if ((this.y >= this_student.y) && (this.y <= (this_student.y + this_student.size))) {
+						console.log("should have collided...");
 						collide(this, this_student);
 						break;
 					}
@@ -79,20 +83,16 @@ function Projectile(launch_x, launch_y, target_x, target_y) {
 			}
 		}
 	}
-	this.update_projectile = function() {
-		//console.log("updating projectile...");
-		this.x -= this.x_speed;
+	this.update_projectile = function() {		
 		if (this.launch_y <= this.target_y) {
-			this.y += this.y_speed;
-			//this.x = this.new_x;
-			//this.y = this.down_y;
 			this.collision_check();
+			this.x -= this.x_speed;
+			this.y += this.y_speed;
 		}
 		else {
-			this.y -= this.y_speed;
-			//this.x = this.new_x;
-			//this.y = this.up_y;
 			this.collision_check();
+			this.x -= this.x_speed;
+			this.y -= this.y_speed;
 				
 		}
 		ctx.fillStyle = "#551A8B"; //purple
@@ -103,10 +103,6 @@ function Projectile(launch_x, launch_y, target_x, target_y) {
 }
 
 function collide(projectile, student) {
-	//delete projectile
-	//remove health from student
-	//check if should delete student
-	//delete student
 	field.projectiles[projectile.name] = undefined;
 	student.health -= projectile.damage;
 	if (student.health <= 0) {

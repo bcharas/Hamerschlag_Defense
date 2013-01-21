@@ -26,17 +26,15 @@ function step() {
 	player_turret.target.update_target();
 }
 
-//END
 
 var timerDelay = 100;
 var field = new Grid();
 var player_turret = new Turret(canvas.width - 50, (canvas.height - 50)/2);
 make_grid();
-var first_student = new student(random_row());
+var first_student = new student(random_row());//new student(random_row());
 field.students["0"] = first_student;
 //field.students.push(ben);
 var health = new Array();
 your_health = new player_health();
 health.push(your_health);
-//END
 setInterval(step, timerDelay);
