@@ -10,13 +10,18 @@ function player_health() {
 	this.name = "0";
 	health_bar(this);
 	this.update_health_bar = function() {
-		health_bar(this);
+		if (this.current_health > 0) {
+			health_bar(this);
+		}
+		else {
+			field.game_is_over = true;
+			end_game();
+		}
 	}
 }
 
 
 function student_health_bar(student) {
-	//this.max_health = 1;
 	this.current_health = student.health;
 	this.width = 1.25 * student.size;
 	this.height = .1 * student.size;
@@ -24,10 +29,8 @@ function student_health_bar(student) {
 	this.start_y = student.y - (.15 * student.size);
 	field.healths_recorded++;
 	this.name = String(field.healths_recorded);
-	//field.healths[this.name] = this;
-	//health_bar(this);
 	this.update_health_bar = function() {
-		console.log("trace");
+		//console.log("trace");
 		this.start_x = student.x - (.125 * student.size);
 		//console.log(String(start_x));
 		if (this.current_health < 1){
@@ -44,6 +47,16 @@ function health_bar(bar) {
 	var offset_x = .01 * bar.width;
 	var offset_y = .2 * bar.height;
 	ctx.fillRect(bar.start_x + offset_x, bar.start_y + offset_y, bar.width - (2 * offset_x), bar.height - (2 * offset_y));
-	ctx.fillStyle = "#66FF00"; //green
-	ctx.fillRect(bar.start_x + offset_x, bar.start_y + offset_y, bar.current_health * (bar.width - (2 * offset_x)), bar.height - (2 * offset_y));
+	if (bar.current_health >= .66) {
+		ctx.fillStyle = "#66FF00"; //green
+		ctx.fillRect(bar.start_x + offset_x, bar.start_y + offset_y, bar.current_health * (bar.width - (2 * offset_x)), bar.height - (2 * offset_y));
+	}
+	else if (bar.current_health >= .33) {
+		ctx.fillStyle = "#FFFF00"; //yellow
+		ctx.fillRect(bar.start_x + offset_x, bar.start_y + offset_y, bar.current_health * (bar.width - (2 * offset_x)), bar.height - (2 * offset_y));
+	}
+	else {
+		ctx.fillStyle = "#FF0000"; //red
+		ctx.fillRect(bar.start_x + offset_x, bar.start_y + offset_y, bar.current_health * (bar.width - (2 * offset_x)), bar.height - (2 * offset_y));
+	}
 }

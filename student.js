@@ -31,10 +31,6 @@ function student(row) {
 			
 			this.x += this.speed;
 			this.draw_student();
-			
-			//if (this.health < 1) {
-			//}
-		
 		}
 		else {
 			graduate_student(this)		
@@ -53,13 +49,14 @@ function random_row() {
 //despawns that student, and deals damage to player health.
 function graduate_student(student) {
 	field.students[student.name] = undefined;
-	//field.healths[student.health_bar] = undefined;
 	if (student.health_bar !== undefined) {
 		field.healths[student.health_bar.name] = undefined;	
 	}
 	your_health.current_health -= .2;
-	ctx.fillStyle = "rgba(255, 0, 0, .5)";
-	ctx.fillRect(0, 0, canvas.width, canvas.height);
+	if (your_health.current_health > 0) {
+		ctx.fillStyle = "rgba(255, 0, 0, .5)";
+		ctx.fillRect(0, 0, canvas.width, canvas.height);
+	}
 
 }
 
