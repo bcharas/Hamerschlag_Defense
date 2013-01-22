@@ -23,6 +23,8 @@ function Grid() {
 	this.projectiles_currently_in_air = 0;
 	this.projectiles_fired = 0;
 	this.projectiles = new Object();
+	this.healths = new Object();
+	this.healths_recorded = 0;
 }
 
 //draws the game background and rows that the students approach along
@@ -51,8 +53,11 @@ function spawn_handler() {
 		field.time_until_student_spawn = 10000;
 		var mob = new student(random_row());
 		field.students[mob.name] = mob;
+		field.healths[mob.health_bar.name] = mob.health_bar;
+		field.healths_recorded++;
 	}
 	if (player_turret.time_between_shots_fired  <= 0) {
+		//console.log("trace");
 		player_turret.time_between_shots_fired = 1000;
 		var homework_shot = new Projectile(player_turret.x, player_turret.y + (player_turret.size / 2), player_turret.target.x, player_turret.target.y);
 		field.projectiles[homework_shot.name] = homework_shot;

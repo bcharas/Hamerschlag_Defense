@@ -11,8 +11,15 @@ function step() {
 			field.students[String(i)].update();
 		}
 	}
-	for (var i = 0; i < health.length; i++) {
+	/*for (var i = 0; i < health.length; i++) {
 		health_bar(health[i]);	
+	}*/
+	for (var i = 0; i < field.healths_recorded; i++){
+		//console.log("trace");
+		//console.log(field.healths[String(i)]);
+		if (field.healths[String(i)] !== undefined) {
+			field.healths[String(i)].update_health_bar();	
+		}
 	}
 	for (var i = 0; i < field.projectiles_fired; i++){
 		if (field.projectiles[String(i)] !== undefined) {
@@ -27,6 +34,7 @@ function step() {
 	ctx.fillText(spawn_msg.concat(spawn_time), canvas.width / 2, field.field_top / 2);
 	player_turret.update_turret();
 	player_turret.target.update_target();
+	//console.log("traceC");
 }
 
 //TODO: MAKE THIS A FUNCTION
@@ -39,9 +47,14 @@ var field = new Grid();
 var player_turret = new Turret(canvas.width - 50, (canvas.height - 50)/2);
 make_field();
 spawn_handler();
-var first_student = new student(random_row());
+var first_student = new student(2);
 field.students["0"] = first_student;
-var health = new Array();
+//var health = new Array();
+//var health = new Object();
 your_health = new player_health();
-health.push(your_health);
+field.healths["0"] = your_health;
+field.healths_recorded++;
+field.healths["1"] = first_student.health_bar;
+field.healths_recorded++;
+//console.log("trace");
 setInterval(step, timerDelay);

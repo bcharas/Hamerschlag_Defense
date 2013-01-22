@@ -31,9 +31,11 @@ function Turret(x, y) {
 
 //establishes parameters and functions for each projectile object fired by turrets
 function Projectile(launch_x, launch_y, target_x, target_y) {
+	//console.log("trace");
 	this.size = 5;
 	this.speed = 10;
-	this.damage = 1; 
+	this.damage = .25; 
+	//this.damage = 1;
 	this.launch_x = launch_x;
 	this.launch_y = launch_y;
 	this.target_x = target_x;
@@ -56,6 +58,7 @@ function Projectile(launch_x, launch_y, target_x, target_y) {
 	//and then draws it at it's new position. See collision_check() for the
 	//case when a collision occurs.
 	this.update_projectile = function() {		
+		//console.log("trace");
 		if (this.launch_y <= this.target_y) {
 			this.collision_check();
 			this.x -= this.x_speed;
@@ -77,23 +80,24 @@ function Projectile(launch_x, launch_y, target_x, target_y) {
 	//projectile should collide (i.e. they share the same space) with a
 	//student, and if it should, calls the collide function.
 	this.collision_check = function() {
+		//console.log("traceA");
 		for (var i = 0; i < field.students_seen; i++) {
 			if (field.students[String(i)] !== undefined) {
 				var this_student = field.students[String(i)];
-				console.log("other test");
+				//console.log("other test");
 				if ((this.x >= this_student.x) && (this.x <= (this_student.x + this_student.size))){	
-					console.log("test");
+					//console.log("test");
 					if (this.launch_y <= this.target_y) {
-						console.log("down_y");
+						//console.log("down_y");
 						if ((this.y >= this_student.y) && (this.y <= (this_student.y + this_student.size))){	
-							console.log("should have collided...");
+							//console.log("should have collided...");
 							collide(this, this_student);
 							break;
 						}
 					
 					}
 					else if ((this.y >= this_student.y) && (this.y <= (this_student.y + this_student.size))) {
-						console.log("should have collided...");
+						//console.log("should have collided...");
 						collide(this, this_student);
 						break;
 					}
@@ -124,9 +128,22 @@ function Target(x, y) {
 //projectile. If the colliding student's health drops to or below zero, the
 //colliding student is also despawned.
 function collide(projectile, student) {
+	//console.log("traceB");
 	field.projectiles[projectile.name] = undefined;
+	/*if (student.health === 1) {
+		student.health_bar = new student_health_bar(student);
+	}*/
+	
+	student.health_bar.current_health -= projectile.damage;
 	student.health -= projectile.damage;
-	if (student.health <= 0) {
+		//student.health -= projectile.damage;
+	
+	if (student.health_bar.current_health <= 0) {
+		//console.log("trace");
 		field.students[student.name] = undefined;
+		
+		if (student.health_bar !== undefined) {
+			field.healths[student.health_bar.name] = undefined;
+		}
 	}
 }

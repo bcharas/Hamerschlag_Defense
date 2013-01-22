@@ -10,6 +10,7 @@ function student(row) {
 	this.speed = 10;
 	//this.direction = "right";
 	this.health = 1
+	this.health_bar = new student_health_bar(this);
 	
 	//draws student on the field
 	this.draw_student = function () {
@@ -20,20 +21,27 @@ function student(row) {
 	//updates a student's location on the field
 	this.update = function () {
 		if ((this.x + this.size) < field.field_right) {
+			
 			//NOTE: the following commented-out code is for if we want to have 
 			//students be able to move backwards for some reason.
 			/*if (this.direction === "right") {
 				this.x += this.speed;
 			}
 			else this.x -= this.speed;*/
+			
 			this.x += this.speed;
 			this.draw_student();
+			
+			//if (this.health < 1) {
+			//}
+		
 		}
 		else {
 			graduate_student(this)		
 		}
 	}
 }
+
 //selects a random row, used for choosing a student's spawn row.
 function random_row() {
 	var rand_num = Math.random();
@@ -45,6 +53,10 @@ function random_row() {
 //despawns that student, and deals damage to player health.
 function graduate_student(student) {
 	field.students[student.name] = undefined;
+	//field.healths[student.health_bar] = undefined;
+	if (student.health_bar !== undefined) {
+		field.healths[student.health_bar.name] = undefined;	
+	}
 	your_health.current_health -= .2;
 	ctx.fillStyle = "rgba(255, 0, 0, .5)";
 	ctx.fillRect(0, 0, canvas.width, canvas.height);
