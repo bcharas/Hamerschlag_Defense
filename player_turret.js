@@ -1,34 +1,26 @@
-//function that places/draws turret
-//function that handles projectiles
-//function that handles placing "targets"
+//adds event listener for mouse presses
+canvas.addEventListener('mousedown', onMouseDown, false);
 
-
+//called whenever a mouse push is detected, and calls a function to create
+// a new projectile target for the player at the location of the click
 function onMouseDown(event) {
-    var x = event.pageX - canvas.offsetLeft;  // do not use event.x, it's not cross-browser!!!
+    var x = event.pageX - canvas.offsetLeft;
     var y = event.pageY - canvas.offsetTop;
 	player_turret.target = new Target(x, y);
-    //ctx.fillStyle = "rgba(0,128,128,0.5)";
-    //ctx.fillRect(x-25, y-25, 50, 50);
 }
 
-function Target(x, y) {
-	this.size = 5;
-	this.x = x;
-	this.y = y;
-	ctx.fillStyle = "#000000";
-	ctx.fillRect(x, y, this.size, this.size);
-	this.update_target = function() {
-		ctx.fillStyle = "#000000";
-		ctx.fillRect(this.x, this.y, this.size, this.size);
-	}
-}
 
+//object that establishes paramaters and functions
+//for a turret object (origin points for projectiles
 function Turret(x, y) {
 	this.size = 50;
 	this.x = x;
 	this.y = y;
-	this.time_to_fire = 2000;
+	this.time_between_shots_fired = 2000;
 	this.target = new Target(0, canvas.height / 2);
+	
+	//handles the drawing of turrets. Supports moving turrets, 
+	//though there currently are none.
 	this.update_turret = function() {
 		ctx.fillStyle = "#551A8B"; //purple
 		ctx.fillRect(this.x, this.y, this.size, this.size);
@@ -37,6 +29,7 @@ function Turret(x, y) {
 	
 }
 
+//establishes parameters and functions for each projectile object fired by turrets
 function Projectile(launch_x, launch_y, target_x, target_y) {
 	this.size = 5;
 	this.speed = 10;
@@ -58,6 +51,31 @@ function Projectile(launch_x, launch_y, target_x, target_y) {
 	this.down_y = this.y + this.y_speed;
 	this.up_y = this.y - this.y_speed;
 	
+	//This function first calls collision_check to see if a collision has
+	//occurred.If it has not, it moves the projectile according to it's speed
+	//and then draws it at it's new position. See collision_check() for the
+	//case when a collision occurs.
+	this.update_projectile = function() {		
+		if (this.launch_y <= this.target_y) {
+			this.collision_check();
+			this.x -= this.x_speed;
+			this.y += this.y_speed;
+		}
+		else {
+			this.collision_check();
+			this.x -= this.x_speed;
+			this.y -= this.y_speed;
+				
+		}
+		ctx.fillStyle = "#551A8B"; //purple
+		ctx.fillRect(this.x, this.y, this.size, this.size);
+		ctx.strokeRect(this.x, this.y, this.size, this.size);
+	
+	}
+	
+	//this function, called whenever a projectile moves, checks if the
+	//projectile should collide (i.e. they share the same space) with a
+	//student, and if it should, calls the collide function.
 	this.collision_check = function() {
 		for (var i = 0; i < field.students_seen; i++) {
 			if (field.students[String(i)] !== undefined) {
@@ -83,25 +101,28 @@ function Projectile(launch_x, launch_y, target_x, target_y) {
 			}
 		}
 	}
-	this.update_projectile = function() {		
-		if (this.launch_y <= this.target_y) {
-			this.collision_check();
-			this.x -= this.x_speed;
-			this.y += this.y_speed;
-		}
-		else {
-			this.collision_check();
-			this.x -= this.x_speed;
-			this.y -= this.y_speed;
-				
-		}
-		ctx.fillStyle = "#551A8B"; //purple
+
+}
+
+
+//object that establishes paramaters and functions
+//for a target object (each projectile is assigned a target that it is fired towards)
+function Target(x, y) {
+	this.size = 5;
+	this.x = x;
+	this.y = y;
+	ctx.fillStyle = "#000000";
+	ctx.fillRect(x, y, this.size, this.size);
+	this.update_target = function() {
+		ctx.fillStyle = "#000000";
 		ctx.fillRect(this.x, this.y, this.size, this.size);
-		ctx.strokeRect(this.x, this.y, this.size, this.size);
-	
 	}
 }
 
+//In the collision case, this function despawns the colliding projectile, and
+//reduces the colliding student's health according to the damage value of the
+//projectile. If the colliding student's health drops to or below zero, the
+//colliding student is also despawned.
 function collide(projectile, student) {
 	field.projectiles[projectile.name] = undefined;
 	student.health -= projectile.damage;
@@ -109,5 +130,3 @@ function collide(projectile, student) {
 		field.students[student.name] = undefined;
 	}
 }
-
-canvas.addEventListener('mousedown', onMouseDown, false);
