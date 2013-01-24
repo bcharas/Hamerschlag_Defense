@@ -7,6 +7,8 @@ function student(row) {
 	this.row = row;
 	this.size = 50;
 	this.y = field.field_top + (row * field.row_height);
+	this.x_center = this.x + (this.size / 2);
+	this.y_center = this.y + (field.row_height / 2);
 	this.speed = 10;
 	//this.direction = "right";
 	this.health = 1
@@ -30,6 +32,7 @@ function student(row) {
 			else this.x -= this.speed;*/
 			
 			this.x += this.speed;
+			this.x_center = this.x + (this.size / 2);
 			this.draw_student();
 		}
 		else {
@@ -60,8 +63,3 @@ function graduate_student(student) {
 
 }
 
-
-//possible bug: it looks like sometimes when the projectile grazes a student corner it doesnt consider it a collision....
-//this might be find if we make sprites
-//possible cause is that collisions only take place at center of the student?
-//NOTE: Watch out for this... but it doesn't always seem to occur... perhaps only for lower left corner?

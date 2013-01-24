@@ -8,6 +8,7 @@ var ctx = canvas.getContext("2d");
 //and the student moves along to reach their goal at the right side of the player screen.
 function Grid() {
 	this.ground_color = "#78AB46";
+	this.sky_color = "#00ccFF";
 	this.num_rows = 5; 
 	this.field_width = (canvas.width * .9) + 50;
 	this.field_height = canvas.height * .75;
@@ -26,6 +27,19 @@ function Grid() {
 	this.healths = new Object();
 	this.healths_recorded = 0;
 	this.game_is_over = false;
+	this.turrets = new Object();
+	this.turret_count = 1;
+	this.paused = false;
+	this.buttons = new Object();
+	this.button_count = 0;
+	this.pause_button = undefined;
+	this.button_check = function(x, y) {
+		if ((x >= field.pause_button.x) && (x <= (field.pause_button.x + field.pause_button.size))) {
+			if ((y >= field.pause_button.y) && (y <= (field.pause_button.y + field.pause_button.size))) {
+				field.pause_button.press();
+			}
+		}
+	}
 }
 
 //draws the game background and rows that the students approach along
@@ -55,9 +69,17 @@ function spawn_handler() {
 	}
 	if (player_turret.time_between_shots_fired  <= 0) {
 		player_turret.time_between_shots_fired = 1000;
-		var homework_shot = new Projectile(player_turret.x, player_turret.y + (player_turret.size / 2), player_turret.target.x, player_turret.target.y);
-		field.projectiles[homework_shot.name] = homework_shot;
-		field.projectiles_currently_in_air += 1;	
+		/*var homework_shot = new Projectile(player_turret.x, player_turret.y + (player_turret.size / 2), player_turret.target.x, player_turret.target.y);*/
+		for (var i = 0; i < field.turret_count; i++){
+			if (field.turrets[String(i)] !== undefined) {
+				var current_turret = field.turrets[String(i)];
+				field.projectiles[String(field.projectiles_fired)] = new Projectile(current_turret.x_center, current_turret.y_center + (current_turret.size / 2), current_turret.target.x, current_turret.target.y);
+				//confirm that projectiles fired is still incrementing
+				
+				//field.projectiles_currently_in_air += 1;	
+			}
+		}
+
 	}
 }
 /*
