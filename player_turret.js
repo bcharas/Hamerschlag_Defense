@@ -43,6 +43,13 @@ function Turret(x, y) {
 		ctx.fillStyle = "#551A8B"; //purple
 		ctx.fillRect(this.x, this.y, this.size, this.size);
 		ctx.strokeRect(this.x, this.y, this.size, this.size);
+		var turretImage = new Image();
+		turretImage.src = "hamerschlag.png";
+		turretImage.onload = function(){
+			var canvas = document.getElementById('myCanvas');
+			var ctx = canvas.getContext('2d');
+			ctx.drawImage(turretImage, 1190, 210);
+		}
 	}
 	
 }
