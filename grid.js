@@ -55,19 +55,24 @@ function make_field() {
 	//ctx.globalAlpha = 0.2;
 	var skyImage = new Image();
 	skyImage.src = 'sky.jpg';
-	skyImage.onload = function(){
+	ctx.drawImage(skyImage, 0, 0);
+	/*skyImage.onload = function(){
 		ctx.drawImage(skyImage, 0, 0);
-	}
+	}*/
 	//ctx.fillStyle = field.ground_color;
 	var grassImage = new Image();
 	grassImage.src = 'grass.jpg';
-	grassImage.onload = function(){
+	for (var row = 0; row < field.num_rows; row++) {
+		var y_position = field.field_top + (row * field.row_height);
+		ctx.drawImage(grassImage, 0, y_position, field.row_width, field.row_height, field.field_left, y_position, field.row_width, field.row_height);
+	}
+	/*grassImage.onload = function(){
 		for (var row = 0; row < field.num_rows; row++) {
 				var y_position = field.field_top + (row * field.row_height);
 				ctx.drawImage(grassImage, 0, y_position, field.row_width, field.row_height, field.field_left, y_position, field.row_width, field.row_height);
 				//ctx.strokeRect(field.field_left, y_position, field.row_width, field.row_height);
 		}
-	}
+	}*/
 }
 
 //spawns new students (in a random row) and new projectiles (aimed at 
