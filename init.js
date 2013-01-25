@@ -16,19 +16,25 @@ function step() {
 						field.students[String(i)].update();
 					}
 				}
+				for (var i = 0; i < field.obstruction_count; i++){
+					if (field.obstructions[String(i)] !== undefined) {
+						field.obstructions[String(i)].update_obstruction();
+					}
+				}
 				for (var i = 0; i < field.projectiles_fired; i++){
 					if (field.projectiles[String(i)] !== undefined) {
 						field.projectiles[String(i)].update_projectile();	
 					}
 				}
-				for (var i = 0; i < field.healths_recorded; i++){
-					if (field.healths[String(i)] !== undefined) {
-						field.healths[String(i)].update_health_bar();	
-					}
-				}
 				for (var i = 0; i < field.turret_count; i++){
 					if (field.turrets[String(i)] !== undefined) {
 						field.turrets[String(i)].update_turret();
+					}
+				}
+
+				for (var i = 0; i < field.healths_recorded; i++){
+					if (field.healths[String(i)] !== undefined) {
+						field.healths[String(i)].update_health_bar();	
 					}
 				}
 				ctx.fillStyle = "#000000";
@@ -43,6 +49,7 @@ function step() {
 				ctx.fillStyle = "#000000";
 				ctx.font = "15px Arial";
 				ctx.fillText("Click to Pause", (field.pause_button.x + (field.pause_button.size / 2)), (field.pause_button.y + (1.5 * field.pause_button.size)));
+				field.obstruction_spawner.update();
 			}
 			else {
 				ctx.fillStyle = field.sky_color;
@@ -65,34 +72,25 @@ function end_game() {
 
 }
 
-//TODO: MAKE THIS A FUNCTION
-
 //This function sets up a round by establishing parameters and calling
 //necessary set-up functions (e.g. making player turret object).
 //Once it completes set-up, further updates are handled by step
+function init() {
+	field.turrets["0"] = player_turret;
+	field.turrets["1"] = auto_turret_1;
+	make_field();
+	spawn_handler();
+	your_health = new player_health();
+	field.healths["0"] = your_health;
+	field.students["0"] = first_student;
+	field.healths["1"] = first_student.health_bar;
+	field.pause_button = new pause_button();
+	setInterval(step, timerDelay);
+}
+//Below are some necessary globals for this to function.
 var timerDelay = 100;
 var field = new Grid();
 var player_turret = new Turret(canvas.width - 50, (canvas.height - 50)/2);
-field.turrets["0"] = player_turret;
 var auto_turret_1 = new Auto_turret(.75 *  canvas.width, field.field_top / 2);
-field.turrets["1"] = auto_turret_1;
-
-/*var auto_turret_2 = new Auto_turret(.33 *  canvas.width, field.field_top / 2);
-field.turrets["2"] = auto_turret_2;
-
-var auto_turret_3 = new Auto_turret(.125 *  canvas.width, field.field_top / 2);
-field.turrets["3"] = auto_turret_3;*/
-//field.turret_count++;
-make_field();
-spawn_handler();
 var first_student = new student(random_row());
-field.students["0"] = first_student;
-your_health = new player_health();
-field.healths["0"] = your_health;
-field.healths_recorded++;
-field.healths["1"] = first_student.health_bar;
-field.healths_recorded++;
-
-field.pause_button = new pause_button();
-//field.buttons["0"] = new Button(
-setInterval(step, timerDelay);
+init();

@@ -8,9 +8,19 @@ function onMouseDown(event) {
     var y = event.pageY - canvas.offsetTop;
 	field.button_check(x, y);
 	if ((field.game_is_over === false) && (field.paused === false)) {
-		player_turret.target = new Target(x, y);
-	}
-	
+		if (field.obstruction_spawner.placing_mode === true) {
+			place_obstruction(x, y);
+			field.obstruction_spawner.placing_mode = false;
+		}
+		else if ((x >= field.obstruction_spawner.x) && (x <= (field.obstruction_spawner.x + field.obstruction_spawner.size))) {
+			if ((y >= field.obstruction_spawner.y) && (y <= (field.obstruction_spawner.y + field.obstruction_spawner.size))) {
+				field.obstruction_spawner.placing_mode = true;
+			}
+		}
+		else {
+			player_turret.target = new Target(x, y);		
+		}
+	}	
 }
 
 
@@ -39,11 +49,9 @@ function Turret(x, y) {
 
 //establishes parameters and functions for each projectile object fired by turrets
 function Projectile(launch_x, launch_y, target_x, target_y) {
-	//console.log("trace");
 	this.size = 5;
 	this.speed = 10;
 	this.damage = .25; 
-	//this.damage = 1;
 	this.launch_x = launch_x;
 	this.launch_y = launch_y;
 	this.target_x = target_x;
@@ -57,9 +65,6 @@ function Projectile(launch_x, launch_y, target_x, target_y) {
 	this.launch_angle = Math.atan2(this.y_distance, this.x_distance);
 	this.x_speed = this.speed * Math.cos(this.launch_angle);
 	this.y_speed = this.speed * Math.sin(this.launch_angle);
-	/*this.new_x = this.x - this.x_speed;
-	this.down_y = this.y + this.y_speed;
-	this.up_y = this.y - this.y_speed;*/
 	
 	//This function first calls collision_check to see if a collision has
 	//occurred.If it has not, it moves the projectile according to it's speed
@@ -69,12 +74,10 @@ function Projectile(launch_x, launch_y, target_x, target_y) {
 		this.collision_check();
 		if (this.launch_y <= this.target_y) {
 			if  (this.launch_x <= this.target_x) {
-				//this.collision_check();
 				this.x += this.x_speed;
 				this.y += this.y_speed;
 			}
 			else {
-				//this.collision_check();
 				this.x -= this.x_speed;
 				this.y += this.y_speed;
 			
@@ -82,12 +85,10 @@ function Projectile(launch_x, launch_y, target_x, target_y) {
 		}
 		else {
 			if  (this.launch_x <= this.target_x) {
-				//this.collision_check();
 				this.x += this.x_speed;
 				this.y -= this.y_speed;
 			}
 			else {
-				//this.collision_check();
 				this.x -= this.x_speed;
 				this.y -= this.y_speed;
 			
@@ -114,7 +115,6 @@ function Projectile(launch_x, launch_y, target_x, target_y) {
 							break;
 						}
 					}
-					//else if ((this.y >= this_student.y) && (this.y <= (this_student.y + this_student.size))) {
 					else if ((this.y >= this_student.y) && (this.y <= (this_student.y + field.row_height))) {
 						collide(this, this_student);
 						break;

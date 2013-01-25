@@ -8,6 +8,7 @@ function player_health() {
 	this.start_x = .125 * canvas.width;
 	this.start_y = field.field_bottom + .33 * (canvas.height - field.field_bottom);
 	this.name = "0";
+	field.healths_recorded++;
 	health_bar(this);
 	this.update_health_bar = function() {
 		if (this.current_health > 0) {
@@ -30,13 +31,31 @@ function student_health_bar(student) {
 	field.healths_recorded++;
 	this.name = String(field.healths_recorded);
 	this.update_health_bar = function() {
-		//console.log("trace");
 		this.start_x = student.x - (.125 * student.size);
-		//console.log(String(start_x));
 		if (this.current_health < 1){
 			health_bar(this);
 		}	
 	}
+}
+
+function obstruction_health(obstruction) {
+	console.log("make health bar");
+	this.current_health = obstruction.health;
+	this.width = 1.25 * obstruction.size;
+	this.height = .1 * obstruction.size;
+	this.start_x = obstruction.x - (.25 * obstruction.size);
+	this.start_y = obstruction.y - (.15 * obstruction.size);
+	this.name = String(field.healths_recorded);
+	field.healths_recorded++;
+	this.update_health_bar = function() {
+		this.start_x = obstruction.x - (.125 * obstruction.size);
+		if (this.current_health < 1){
+			health_bar(this);
+		}	
+	}
+		
+
+
 }
 
 //handles the drawing of given health bars, both for the player and (yet unimplemented) for NPC's.

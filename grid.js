@@ -40,7 +40,12 @@ function Grid() {
 			}
 		}
 	}
+	this.obstruction_spawner = new obstruction_spawner(300, 50); //TODO: FIX ANY MAGIC NUMBERS
+	this.obstructions = new Object();
+	this.obstruction_count = 0;
+	
 }
+
 
 //draws the game background and rows that the students approach along
 function make_field() {
@@ -69,14 +74,10 @@ function spawn_handler() {
 	}
 	if (player_turret.time_between_shots_fired  <= 0) {
 		player_turret.time_between_shots_fired = 1000;
-		/*var homework_shot = new Projectile(player_turret.x, player_turret.y + (player_turret.size / 2), player_turret.target.x, player_turret.target.y);*/
 		for (var i = 0; i < field.turret_count; i++){
 			if (field.turrets[String(i)] !== undefined) {
 				var current_turret = field.turrets[String(i)];
-				field.projectiles[String(field.projectiles_fired)] = new Projectile(current_turret.x_center, current_turret.y_center + (current_turret.size / 2), current_turret.target.x, current_turret.target.y);
-				//confirm that projectiles fired is still incrementing
-				
-				//field.projectiles_currently_in_air += 1;	
+				field.projectiles[String(field.projectiles_fired)] = new Projectile(current_turret.x_center, current_turret.y_center, current_turret.target.x, current_turret.target.y);
 			}
 		}
 
