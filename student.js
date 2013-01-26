@@ -18,8 +18,48 @@ function student(row) {
 		ctx.fillRect(this.x, this.y, this.size, field.row_height);
 		ctx.strokeRect(this.x, this.y, this.size, field.row_height);
 	}
+  
+  //This function takes the number of projectiles in three consecutive 
+  //rows and returns the row number with the fewest projectiles
+  this.get_row_with_min_projectiles = function (x, y, z, row_param) {
+    var largeNumber = 10000;
+    if (x === -1) 
+      x = largeNumber;
+    if (z === -1)
+      z = largeNumber;
+    if (x < y && x <= z) {
+      return (row_param + 1);
+    }
+    else if (z < y && z <= x) {
+      return (row_param);
+    }  
+    else {       
+      return (row_param);
+    }
+  }
+
 	//updates a student's location on the field
 	this.update = function () {
+    //This section with "projs_in_rows" controls the student's ability
+    //to gauge how many projectile are in a row in order to change
+    //rows accordingly.
+     var projs_in_row = field.num_projectiles_per_row[this.row];
+    if (projs_in_row >= 2) {
+      //The value of -1 marks a row that can't be moved to, such 
+      //as a row above the top of the board or below the bottom
+      var projs_in_row_above = -1;
+      if (this.row !== 0) {
+        projs_in_row_above = field.num_projectiles_per_row[this.row - 1];
+      }
+      var projs_in_row_below = -1;
+      if (this.row !== (field.num_rows - 1)) {
+       projs_in_row_below = field.num_projectiles_per_row[this.row + 1];
+      } 
+      var new_row = this.get_row_with_min_projectiles(projs_in_row_below, 
+                          projs_in_row, projs_in_row_above, this.row);
+      this.row = new_row;
+      this.y = field.field_top + (this.row * field.row_height);
+    }
 		if ((this.x + this.size) < field.field_right) {
 			
 			//NOTE: the following commented-out code is for if we want to have 
