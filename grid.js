@@ -10,6 +10,8 @@ function Grid() {
 	this.ground_color = "#78AB46";
 	this.num_rows = 5;
 
+	this.sky_color = "#00ccFF";
+	this.num_rows = 5; 
 	this.field_width = (canvas.width * .9) + 50;
 	this.field_height = canvas.height * .75;
  
@@ -35,19 +37,52 @@ function Grid() {
 	this.healths = new Object();
 	this.healths_recorded = 0;
 	this.game_is_over = false;
+	this.turrets = new Object();
+	this.turret_count = 1;
+	this.paused = false;
+	this.buttons = new Object();
+	this.button_count = 0;
+	this.pause_button = undefined;
+	this.button_check = function(x, y) {
+		if ((x >= field.pause_button.x) && (x <= (field.pause_button.x + field.pause_button.size))) {
+			if ((y >= field.pause_button.y) && (y <= (field.pause_button.y + field.pause_button.size))) {
+				field.pause_button.press();
+			}
+		}
+	}
+	this.obstruction_spawner = new obstruction_spawner(300, 50); //TODO: FIX ANY MAGIC NUMBERS
+	this.obstructions = new Object();
+	this.obstruction_count = 0;
+	
 }
+
 
 //draws the game background and rows that the students approach along
 function make_field() {
 	var sky_color = "#00ccFF";
 	ctx.fillStyle = sky_color;
 	ctx.fillRect(0, 0, canvas.width, canvas.height);
-	ctx.fillStyle = field.ground_color;
-	for (var row = 0; row < 5; row++) {
-			var y_position = field.field_top + (row * field.row_height);
-			ctx.fillRect(field.field_left, y_position, field.row_width, field.row_height);
-			ctx.strokeRect(field.field_left, y_position, field.row_width, field.row_height);
+	//ctx.globalAlpha = 0.2;
+	var skyImage = new Image();
+	skyImage.src = 'sky.jpg';
+	ctx.drawImage(skyImage, 0, 0);
+	/*skyImage.onload = function(){
+		ctx.drawImage(skyImage, 0, 0);
+	}*/
+	//ctx.fillStyle = field.ground_color;
+	var grassImage = new Image();
+	grassImage.src = 'grass.jpg';
+	for (var row = 0; row < field.num_rows; row++) {
+		var y_position = field.field_top + (row * field.row_height);
+		ctx.drawImage(grassImage, 0, y_position, field.row_width, field.row_height, field.field_left, y_position, field.row_width, field.row_height);
 	}
+	/*grassImage.onload = function(){
+		for (var row = 0; row < field.num_rows; row++) {
+				var y_position = field.field_top + (row * field.row_height);
+				ctx.drawImage(grassImage, 0, y_position, field.row_width, field.row_height, field.field_left, y_position, field.row_width, field.row_height);
+				//ctx.strokeRect(field.field_left, y_position, field.row_width, field.row_height);
+		}
+	}*/
 }
 
 //spawns new students (in a random row) and new projectiles (aimed at 
@@ -64,9 +99,13 @@ function spawn_handler() {
 	}
 	if (player_turret.time_between_shots_fired  <= 0) {
 		player_turret.time_between_shots_fired = 1000;
-		var homework_shot = new Projectile(player_turret.x, player_turret.y + (player_turret.size / 2), player_turret.target.x, player_turret.target.y);
-		field.projectiles[homework_shot.name] = homework_shot;
-		field.projectiles_currently_in_air += 1;	
+		for (var i = 0; i < field.turret_count; i++){
+			if (field.turrets[String(i)] !== undefined) {
+				var current_turret = field.turrets[String(i)];
+				field.projectiles[String(field.projectiles_fired)] = new Projectile(current_turret.x_center, current_turret.y_center, current_turret.target.x, current_turret.target.y);
+			}
+		}
+
 	}
 }
 /*

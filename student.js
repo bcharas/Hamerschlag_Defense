@@ -7,10 +7,13 @@ function student(row) {
 	this.row = row;
 	this.size = 50;
 	this.y = field.field_top + (row * field.row_height);
+	this.x_center = this.x + (this.size / 2);
+	this.y_center = this.y + (field.row_height / 2);
 	this.speed = 10;
 	//this.direction = "right";
 	this.health = 1
 	this.health_bar = new student_health_bar(this);
+	this.just_knocked_back = false;
 	
 	//draws student on the field
 	this.draw_student = function () {
@@ -61,6 +64,7 @@ function student(row) {
       this.y = field.field_top + (this.row * field.row_height);
     }
 		if ((this.x + this.size) < field.field_right) {
+			var should_move = true;
 			
 			//NOTE: the following commented-out code is for if we want to have 
 			//students be able to move backwards for some reason.
@@ -69,8 +73,38 @@ function student(row) {
 			}
 			else this.x -= this.speed;*/
 			
-			this.x += this.speed;
-			this.draw_student();
+			for (var i = 0; i < field.obstruction_count; i++){
+				if (field.obstructions[String(i)] !== undefined) {
+					var obstruction = field.obstructions[String(i)];
+					if (this.y === obstruction.y) {
+						if (((this.x + this.size) >= obstruction.x) && ((this.x + size) <= (obstruction.x + obstruction.size))){
+							should_move = false;
+							if (this.just_knocked_back === true) {
+								this.x = obstruction.x - this.size;
+								this.draw_student();
+								this.just_knocked_back = false;
+								obstruction.health -= .333;
+								obstruction.health_bar.current_health -= .333;
+								if (obstruction.health_bar.current_health <= 0) {
+									console.log("destroyed");
+									destroy_obstruction(obstruction);
+								}
+								break;
+							}
+							else {
+								this.x = obstruction.x - (1.5 * this.size);
+								this.draw_student();
+								this.just_knocked_back = true;
+								break;						
+							}
+						}
+					}
+				}
+			}
+			if (should_move === true)
+				this.x += this.speed;
+				this.x_center = this.x + (this.size / 2);
+				this.draw_student();
 		}
 		else {
 			graduate_student(this)		
@@ -100,8 +134,3 @@ function graduate_student(student) {
 
 }
 
-
-//possible bug: it looks like sometimes when the projectile grazes a student corner it doesnt consider it a collision....
-//this might be find if we make sprites
-//possible cause is that collisions only take place at center of the student?
-//NOTE: Watch out for this... but it doesn't always seem to occur... perhaps only for lower left corner?
