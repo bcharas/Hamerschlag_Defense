@@ -8,9 +8,18 @@ var ctx = canvas.getContext("2d");
 //and the student moves along to reach their goal at the right side of the player screen.
 function Grid() {
 	this.ground_color = "#78AB46";
-	this.num_rows = 5; 
+	this.num_rows = 5;
+
 	this.field_width = (canvas.width * .9) + 50;
 	this.field_height = canvas.height * .75;
+ 
+  //This declaration and for loop initializes the 
+  //number of projectiles in each row as 0 to start 
+  this.num_projectiles_per_row = Array(this.num_rows);
+  for (var i = 0; i < this.num_rows; i++) {
+    this.num_projectiles_per_row[i] = 0;
+  }
+ 
 	this.field_left = -50;
 	this.field_right = this.field_left + this.field_width;
 	this.field_top = (canvas.height - this.field_height) / 2;
