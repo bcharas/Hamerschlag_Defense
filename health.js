@@ -31,7 +31,7 @@ function student_health_bar(student) {
 	field.healths_recorded++;
 	this.name = String(field.healths_recorded);
 	this.update_health_bar = function() {
-		this.start_x = student.x - (.125 * student.size);
+	this.start_x = student.x - (.125 * student.size);
 		if (this.current_health < 1){
 			health_bar(this);
 		}	

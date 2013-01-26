@@ -1,4 +1,4 @@
-obstructions (player placed blocks to slow down student movement)
+COMPLETED BY BEN obstructions (player placed blocks to slow down student movement)
 turret movement on player command (not sure if we want this)
 implement images (i.e. replace existing rectangles with any art we have)
 main menu

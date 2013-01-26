@@ -1,56 +1,35 @@
+function spawn_timer() {
+	ctx.fillStyle = "#000000";
+	ctx.font = "20px Arial";
+	ctx.textAlign = "center";
+	var spawn_time = String(field.time_until_student_spawn/ 1000);
+	var spawn_msg = "Time to next spawn: ";
+	ctx.fillText(spawn_msg.concat(spawn_time), canvas.width / 2, field.field_top / 2);
+}
+
+function pause_handler() {
+	field.pause_button.update_button();
+	ctx.fillStyle = "#000000";
+	ctx.font = "15px Arial";
+	ctx.fillText("Click to Pause", (field.pause_button.x + (field.pause_button.size / 2)), (field.pause_button.y + (1.5 * field.pause_button.size)));
+}
 
 //This is the function that is called every interval, and is the function that
 //ensures all updates are occuring as necessary.
 //Once the round has started, all functions are 
 //called from either here or an event listener.
 function step() {
-	//canvas.clearRect(0, 0, 300, 300);
 	your_health.update_health_bar();
 	if (field.game_is_over === false){
-
 			if (field.paused === false) {
 				make_field();
 				spawn_handler();
-				
-				for (var i = 0; i < field.students_seen; i++){
-					if (field.students[String(i)] !== undefined) {
-						field.students[String(i)].update();
-					}
-				}
-				for (var i = 0; i < field.obstruction_count; i++){
-					if (field.obstructions[String(i)] !== undefined) {
-						field.obstructions[String(i)].update_obstruction();
-					}
-				}
-				for (var i = 0; i < field.projectiles_fired; i++){
-					if (field.projectiles[String(i)] !== undefined) {
-						field.projectiles[String(i)].update_projectile();	
-					}
-				}
-				for (var i = 0; i < field.turret_count; i++){
-					if (field.turrets[String(i)] !== undefined) {
-						field.turrets[String(i)].update_turret();
-					}
-				}
-
-				for (var i = 0; i < field.healths_recorded; i++){
-					if (field.healths[String(i)] !== undefined) {
-						field.healths[String(i)].update_health_bar();	
-					}
-				}
-				ctx.fillStyle = "#000000";
-				ctx.font = "20px Arial";
-				ctx.textAlign = "center";
-				var spawn_time = String(field.time_until_student_spawn/ 1000);
-				var spawn_msg = "Time to next spawn: ";
-				ctx.fillText(spawn_msg.concat(spawn_time), canvas.width / 2, field.field_top / 2);
+				update_handler();
+				spawn_timer();
 				player_turret.update_turret();
-				player_turret.target.update_target();		
-				field.pause_button.update_button();
-				ctx.fillStyle = "#000000";
-				ctx.font = "15px Arial";
-				ctx.fillText("Click to Pause", (field.pause_button.x + (field.pause_button.size / 2)), (field.pause_button.y + (1.5 * field.pause_button.size)));
-				field.obstruction_spawner.update();
+				player_turret.target.update_target();
+				pause_handler();
+				field.obstruction_spawner.update(); //FIGURE OUT PAUSE TEXT BUG
 			}
 			else {
 				ctx.fillStyle = field.sky_color;

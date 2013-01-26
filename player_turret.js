@@ -35,6 +35,7 @@ function Turret(x, y) {
 	this.time_between_shots_fired = 2000;
 	this.target = new Target(0, canvas.height / 2);
 	this.name = String(field.turret_count);
+	this.turret_type = "controlled turret";
 	field.turret_count++;
 	
 	//handles the drawing of turrets. Supports moving turrets, 
@@ -45,11 +46,7 @@ function Turret(x, y) {
 		ctx.strokeRect(this.x, this.y, this.size, this.size);
 		var turretImage = new Image();
 		turretImage.src = "hamerschlag.png";
-		turretImage.onload = function(){
-			var canvas = document.getElementById('myCanvas');
-			var ctx = canvas.getContext('2d');
-			ctx.drawImage(turretImage, 1190, 210);
-		}
+		ctx.drawImage(turretImage, 1190, 210);
 	}
 	
 }
@@ -97,10 +94,8 @@ function Projectile(launch_x, launch_y, target_x, target_y) {
 			}
 			else {
 				this.x -= this.x_speed;
-				this.y -= this.y_speed;
-			
-			}
-				
+				this.y -= this.y_speed;			
+			}				
 		}
 		ctx.fillStyle = "#551A8B"; //purple
 		ctx.fillRect(this.x, this.y, this.size, this.size);
