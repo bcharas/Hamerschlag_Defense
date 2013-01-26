@@ -18,7 +18,7 @@ function onMouseDown(event) {
 			}
 		}
 		else {
-			player_turret.target = new Target(x, y);		
+			player_turret.target = new Target(x, y);
 		}
 	}	
 }
@@ -38,7 +38,7 @@ function Turret(x, y) {
 	this.turret_type = "controlled turret";
 	field.turret_count++;
 	
-	//handles the drawing of turrets. Supports moving turrets, 
+	//handles the drawing of turrets. Supports moving turrets,
 	//though there currently are none.
 	this.update_turret = function() {
 		ctx.fillStyle = "#551A8B"; //purple
@@ -93,7 +93,7 @@ function Projectile(launch_x, launch_y, target_x, target_y) {
 	//and then draws it at it's new position. See collision_check() for the
 	//case when a collision occurs.  
   // Got rid of the duplicated update function
-	this.update_projectile = function() {		
+	this.update_projectile = function() {
 		this.check_for_row_change();
 		this.collision_check();
 		if (this.launch_y <= this.target_y) {
@@ -114,7 +114,7 @@ function Projectile(launch_x, launch_y, target_x, target_y) {
 			}
 			else {
 				this.x -= this.x_speed;
-				this.y -= this.y_speed;			
+				this.y -= this.y_speed;	
 			}				
 		}
 
@@ -137,7 +137,7 @@ function Projectile(launch_x, launch_y, target_x, target_y) {
 			  field.projectiles[this.name] = undefined;
 		}
 	}
-	
+
 	//this function, called whenever a projectile moves, checks if the
 	//projectile should collide (i.e. they share the same space) with a
 	//student, and if it should, calls the collide function.
@@ -145,9 +145,9 @@ function Projectile(launch_x, launch_y, target_x, target_y) {
 		for (var i = 0; i < field.students_seen; i++) {
 			if (field.students[String(i)] !== undefined) {
 				var this_student = field.students[String(i)];
-				if ((this.x >= this_student.x) && (this.x <= (this_student.x + this_student.size))){	
+				if ((this.x >= this_student.x) && (this.x <= (this_student.x + this_student.size))){
 					if (this.launch_y <= this.target_y) {
-						if ((this.y >= this_student.y) && (this.y <= (this_student.y + field.row_height))){	
+						if ((this.y >= this_student.y) && (this.y <= (this_student.y + field.row_height))){
 							collide(this, this_student);
 							break;
 						}
