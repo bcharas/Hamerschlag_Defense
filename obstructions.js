@@ -26,8 +26,16 @@ function Obstruction(x, row) {
 	this.name = String(field.obstruction_count);
 	this.x = x;
 	this.row = row;
+	//ADD 2 TO PROJS FOR THIS ROW
 	this.y = field.field_top + (this.row * field.row_height);
-	this.size = 50;
+	this.quadrant = get_quadrant(this.x, this.y, this.row);
+	this.decision_value = 3 //how much a student will try to avoid the obstruction, in terms of how many projectiles it's worth
+	//field.num_projectiles_per_row[this.row][this.quadrant] += 2;
+	for (var i = 0; i < this.decision_value; i++) {
+		increment_quadrants(this.row, this.quadrant);	
+	}
+	increment_quadrants(this.row, this.quadrant);
+	this.size = field.object_size;
 	this.health = 1;
 	this.health_bar = new obstruction_health(this);
 	this.color = "#76766E";
@@ -42,6 +50,11 @@ function Obstruction(x, row) {
 function destroy_obstruction(obstruction) {
 	console.log("health num" + obstruction.health_bar.name);
 	console.log("obst num" + obstruction.name);
+	//field.num_projectiles_per_row[this.row] += 2;
+	for (var i = 0; i < obstruction.decision_value; i++) {
+		decrement_quadrants(obstruction.row, obstruction.quadrant);	
+	}
+	//REMOVE 2 TO PROJS FOR THIS ROW
 	field.healths[obstruction.health_bar.name] = undefined;
 	field.obstructions[obstruction.name] = undefined;
 }
@@ -49,18 +62,18 @@ function destroy_obstruction(obstruction) {
 function obstruction_spawner(x, y){
 	this.x = x;
 	this.y = y;
-	this.size = 50;
+	this.size = field.object_size;
 	this.placing_mode = false;
 	this.update = function() {
 		if (this.placing_mode === false) {
 			ctx.fillStyle = "#000000";
 			ctx.textAlign = "center";
-			ctx.fillText("Click to pick up an obstruction.", 325, 25);
+			ctx.fillText("Click to pick up an obstruction.", 150, canvas.height - 15);
 		}
 		else {
 			ctx.fillStyle = "#ffffff";
 			ctx.textAlign = "center";
-			ctx.fillText("Now click on the board to place it.", 325, 25);
+			ctx.fillText("Now click on the board to place it.", 150, canvas.height - 15);
 		}
 		ctx.fillRect(this.x, this.y, this.size, this.size);	
 		ctx.fillStyle = "#000000";

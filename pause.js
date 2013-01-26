@@ -13,7 +13,7 @@ function Button(button, funct, default_position) {
 	button.funct = funct;
 	button.default_position = default_position;
 	button.position = button.default_position;
-	button.color = "#00ffbb";
+	button.color = "#00FFBB";
 	button.inverted_color = "#ff0055";//TODO: Add color inverter function
 	button.press = function() {
 		button.funct();
@@ -35,8 +35,8 @@ function Button(button, funct, default_position) {
 }
 
 function pause_button() {
-	this.size = 50;
-	this.x = ((canvas.width - field.field_right) / 2);
+	this.size = field.object_size;
+	this.x = (field.field_right + ((canvas.width - field.field_right) / 2)) - (this.size / 2);
 	this.y = .9 * canvas.height;
 	this.pause = function() {
 		if (field.paused === true) {
