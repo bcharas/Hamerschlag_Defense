@@ -70,7 +70,7 @@ function init() {
 //Below are some necessary globals for this to function.
 var timerDelay = 100;
 var field = new Grid();
-var player_turret = new Turret(canvas.width - 50, (canvas.height - 50)/2);
+var player_turret = new Turret(canvas.width - 100, (canvas.height - 50)/2);
 var auto_turret_1 = new Auto_turret(.75 *  canvas.width, field.field_top / 2);
 var first_student = new student(random_row());
 init();

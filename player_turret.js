@@ -69,38 +69,30 @@ function Projectile(launch_x, launch_y, target_x, target_y) {
 	this.launch_angle = Math.atan2(this.y_distance, this.x_distance);
 	this.x_speed = this.speed * Math.cos(this.launch_angle);
 	this.y_speed = this.speed * Math.sin(this.launch_angle);
-	this.new_x = this.x - this.x_speed;
+	/*this.new_x = this.x - this.x_speed;
 	this.down_y = this.y + this.y_speed;
-	this.up_y = this.y - this.y_speed;
-  this.row = Math.floor((this.y - field.field_top) / field.row_height);
-  field.num_projectiles_per_row[this.row]++;
-	
+	this.up_y = this.y - this.y_speed;*/
+	this.row = Math.floor((this.y - field.field_top) / field.row_height);
+	field.num_projectiles_per_row[this.row]++;
+	    
+	//This code checks if a projectile has changed rows. If so, it adjusts 
+    //the values of projectiles in each row accordingly 
+    this.check_for_row_change = function() {
+		var new_row = Math.floor((this.y - field.field_top) / field.row_height);
+		if (new_row !== this.row || this.x <= 0) {
+		  field.num_projectiles_per_row[this.row]--;
+		  
+		  if (new_row !== -1 && new_row !== this.row && this.x >= 0)
+			field.num_projectiles_per_row[new_row]++;
+		}
+		this.row = new_row;
+	}
 	//This function first calls collision_check to see if a collision has
 	//occurred.If it has not, it moves the projectile according to it's speed
 	//and then draws it at it's new position. See collision_check() for the
 	//case when a collision occurs.
-	this.update_projectile = function() {
-  if (this.launch_y <= this.target_y) {
-    this.collision_check();
-    this.x -= this.x_speed;
-    this.y += this.y_speed;
-  }
-  else {
-    this.collision_check();
-    this.x -= this.x_speed;
-    this.y -= this.y_speed;				
-  }
-    //This code checks if a projectile has changed rows. If so, it adjusts 
-    //the values of projectiles in each row accordingly 
-    var new_row = Math.floor((this.y - field.field_top) / field.row_height);
-    if (new_row !== this.row || this.x <= 0) {
-      field.num_projectiles_per_row[this.row]--;
-      
-      if (new_row !== -1 && new_row !== this.row && this.x >= 0)
-        field.num_projectiles_per_row[new_row]++;
-    }
-    this.row = new_row;
 	this.update_projectile = function() {		
+		this.check_for_row_change();
 		this.collision_check();
 		if (this.launch_y <= this.target_y) {
 			if  (this.launch_x <= this.target_x) {
@@ -128,9 +120,9 @@ function Projectile(launch_x, launch_y, target_x, target_y) {
 		ctx.strokeRect(this.x, this.y, this.size, this.size);
     
     //This removes projectiles that have gone off the screen
-    if (this.x <= 0) {
-		  field.projectiles[this.name] = undefined;
-    }
+		if (this.x <= 0) {
+			  field.projectiles[this.name] = undefined;
+		}
 	}
 	
 	//this function, called whenever a projectile moves, checks if the

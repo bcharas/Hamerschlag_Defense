@@ -71,9 +71,12 @@ function make_field() {
 		ctx.drawImage(skyImage, 0, 0);
 	}*/
 	//ctx.fillStyle = field.ground_color;
-	
 	ctx.fillStyle = "#78AB46";
 	ctx.fillRect(field.field_left, field.field_top, field.field_width, field.field_height);
+	ctx.fillStyle = "#000000";
+	for (var i = 0; i < field.num_rows; i++) {
+		ctx.strokeRect(field.field_left, (field.field_top + (field.row_height * i)), field.field_width, field.row_height);	
+	}
 	//UNCOMMENT WHEN DONE, THIS IS THE GRASS
 	/*var grassImage = new Image();
 	grassImage.src = 'grass.jpg';

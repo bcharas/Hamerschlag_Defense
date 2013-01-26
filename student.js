@@ -24,20 +24,23 @@ function student(row) {
   
   //This function takes the number of projectiles in three consecutive 
   //rows and returns the row number with the fewest projectiles
-  this.get_row_with_min_projectiles = function (x, y, z, row_param) {
+  this.get_row_with_min_projectiles = function (projs_in_row_below, 
+                          projs_in_row, projs_in_row_above, row_num) {
     var largeNumber = 10000;
-    if (x === -1) 
-      x = largeNumber;
-    if (z === -1)
-      z = largeNumber;
-    if (x < y && x <= z) {
-      return (row_param + 1);
+    if (projs_in_row_below === -1) {
+		projs_in_row_below = largeNumber;
+	}
+    if (projs_in_row_above === -1) {
+		projs_in_row_above = largeNumber;
+	}
+    if (projs_in_row_below < projs_in_row && projs_in_row_below <= projs_in_row_above) {
+		return (row_num + 1);
     }
-    else if (z < y && z <= x) {
-      return (row_param);
+    else if (projs_in_row_above < projs_in_row && projs_in_row_above <= projs_in_row_below) {
+		return (row_num - 1);
     }  
     else {       
-      return (row_param);
+		return (row_num);
     }
   }
 
@@ -46,23 +49,25 @@ function student(row) {
     //This section with "projs_in_rows" controls the student's ability
     //to gauge how many projectile are in a row in order to change
     //rows accordingly.
-     var projs_in_row = field.num_projectiles_per_row[this.row];
-    if (projs_in_row >= 2) {
-      //The value of -1 marks a row that can't be moved to, such 
-      //as a row above the top of the board or below the bottom
-      var projs_in_row_above = -1;
-      if (this.row !== 0) {
-        projs_in_row_above = field.num_projectiles_per_row[this.row - 1];
-      }
-      var projs_in_row_below = -1;
-      if (this.row !== (field.num_rows - 1)) {
-       projs_in_row_below = field.num_projectiles_per_row[this.row + 1];
-      } 
-      var new_row = this.get_row_with_min_projectiles(projs_in_row_below, 
-                          projs_in_row, projs_in_row_above, this.row);
-      this.row = new_row;
-      this.y = field.field_top + (this.row * field.row_height);
-    }
+		var projs_in_row = field.num_projectiles_per_row[this.row];
+		if (projs_in_row >= 2) {
+			//The value of -1 marks a row that can't be moved to, such 
+			//as a row above the top of the board or below the bottom
+			var projs_in_row_above = -1;
+			if (this.row !== 0) {
+				projs_in_row_above = field.num_projectiles_per_row[this.row - 1];
+			}
+			var projs_in_row_below = -1;
+			if (this.row !== (field.num_rows - 1)) {
+				projs_in_row_below = field.num_projectiles_per_row[this.row + 1];
+			} 
+			var new_row = this.get_row_with_min_projectiles(projs_in_row_below, 
+							  projs_in_row, projs_in_row_above, this.row);
+			this.row = new_row;
+			this.y = field.field_top + (this.row * field.row_height);
+			this.y_center = this.y + (field.row_height / 2);
+			
+		}
 		if ((this.x + this.size) < field.field_right) {
 			var should_move = true;
 			
