@@ -70,8 +70,20 @@ function Grid() {
 	this.obstruction_count = 0;
 	this.mid_x = this.field_width / 2;
 	this.mid_y = (this.field_bottom - this.field_top) / 2;
-	}
 
+}
+
+function no_students_on_grid_at_end_of_level() {
+  if (field.students_seen >= max_students_on_this_level) {
+    for (var i = 0; i < field.students_seen; i++) {
+      if (field.students[String(i)] !== undefined) {
+        return false;
+      }   
+    }
+    return true;
+  }
+  return false;
+}
 
 //draws the game background and rows that the students approach along
 function make_field() {
@@ -98,12 +110,21 @@ function make_field() {
 
 }
 
+
 //spawns new students (in a random row) and new projectiles (aimed at 
 //player target) on an interval
 function spawn_handler() {
-	field.time_until_student_spawn -= timerDelay;
-	player_turret.time_between_shots_fired -= timerDelay;
-	if (field.time_until_student_spawn <= 0) {
+  if (field.students_seen >= max_students_on_this_level) {
+    field.time_until_student_spawn = 0;
+    player_turret.time_between_shots_fired = 0;
+  }
+  else {
+    field.time_until_student_spawn -= timerDelay;
+    player_turret.time_between_shots_fired -= timerDelay;
+	}
+
+  if (field.time_until_student_spawn <= 0 
+      && field.students_seen < max_students_on_this_level) {
 		field.time_until_student_spawn = field.max_time_until_student_spawn;
 		//field.time_until_student_spawn = 10000;
 		//var mob = new student(random_row());

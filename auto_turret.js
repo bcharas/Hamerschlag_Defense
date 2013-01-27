@@ -85,9 +85,9 @@ function Auto_projectile(launch_x, launch_y, launch_angle) {
 	
 	this.row = Math.floor((this.y - field.field_top) / field.row_height);
 	this.quadrant = get_quadrant(this.x, this.y, this.row);
-	console.log("traceC");
-	console.log(this.row);
-	console.log(this.quadrant);
+	//console.log("traceC");
+	//console.log(this.row);
+	//console.log(this.quadrant);
 	increment_quadrants(this.row, this.quadrant);
 	//This code checks if a projectile has changed rows. If so, it adjusts 
     //the values of projectiles in each row accordingly 
@@ -100,7 +100,7 @@ function Auto_projectile(launch_x, launch_y, launch_angle) {
 		  if (new_row !== -1 && new_row !== this.row && this.x >= 0)
 			//field.num_projectiles_per_row[new_row]++;
 			this.quadrant = get_quadrant(this.x, this.y, this.row);
-			console.log("traceD");
+			//console.log("traceD");
 			increment_quadrants(new_row, this.quadrant);
 		}
 		this.row = new_row;
