@@ -19,7 +19,7 @@ function Grid() {
 	this.sky_color = "#00ccFF";
 	this.num_rows = 5; 
 	this.field_width = (canvas.width * .9) + 50;
-	this.field_height = canvas.height * .75;
+	this.field_height = canvas.height * .5;
  
   //This declaration and for loop initializes the 
   //number of projectiles in each row as 0 to start 
