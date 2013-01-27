@@ -3,7 +3,7 @@ function Auto_turret(x, y) {
 	this.y = y;
 	Turret(this.x, this.y);
 	this.turret_type = "auto turret";
-	this.size = 50;
+	this.size = field.object_size;
 	this.x_center = this.x + (this.size / 2);
 	this.y_center = this.y + (this.size / 2);
 	this.target = new Target(0, canvas.height/2);
@@ -11,7 +11,7 @@ function Auto_turret(x, y) {
 	this.nearest_student_distance = undefined;
 	this.nearest_student_x_distance = undefined;
 	this.nearest_student_y_distance = undefined;
-	this.projectile_speed = 10;	
+	this.projectile_speed = field.projectile_speed;
 	this.find_nearest_student = function() {
 		var min_distance = undefined;
 		for (var i = 0; i < field.students_seen; i++){
@@ -80,19 +80,28 @@ function Auto_projectile(launch_x, launch_y, launch_angle) {
 	this.x = launch_x;
 	this.y = launch_y;
 	this.name = String(field.projectiles_fired);
+	this.in_middle = false;
 	field.projectiles_fired++;
 	
 	this.row = Math.floor((this.y - field.field_top) / field.row_height);
-	field.num_projectiles_per_row[this.row]++;	    
+	this.quadrant = get_quadrant(this.x, this.y, this.row);
+	console.log("traceC");
+	console.log(this.row);
+	console.log(this.quadrant);
+	increment_quadrants(this.row, this.quadrant);
 	//This code checks if a projectile has changed rows. If so, it adjusts 
     //the values of projectiles in each row accordingly 
     this.check_for_row_change = function() {
 		var new_row = Math.floor((this.y - field.field_top) / field.row_height);
 		if (new_row !== this.row || this.x <= 0) {
-		  field.num_projectiles_per_row[this.row]--;
+		  //field.num_projectiles_per_row[this.row]--;
+		  decrement_quadrants(this.row, this.quadrant);
 		  
 		  if (new_row !== -1 && new_row !== this.row && this.x >= 0)
-			field.num_projectiles_per_row[new_row]++;
+			//field.num_projectiles_per_row[new_row]++;
+			this.quadrant = get_quadrant(this.x, this.y, this.row);
+			console.log("traceD");
+			increment_quadrants(new_row, this.quadrant);
 		}
 		this.row = new_row;
 	}
@@ -104,13 +113,18 @@ function Auto_projectile(launch_x, launch_y, launch_angle) {
 	//and then draws it at it's new position. See collision_check() for the
 	//case when a collision occurs.
 	this.update_projectile = function() {		
-		this.check_for_row_change();
+		//this.check_for_row_change();
 		this.collision_check();
 		this.x += this.x_speed;
 		this.y += this.y_speed;
+		this.check_for_row_change();
 		ctx.fillStyle = "#551A8B"; //purple
 		ctx.fillRect(this.x, this.y, this.size, this.size);
 		ctx.strokeRect(this.x, this.y, this.size, this.size);
+		if (this.x <= 0) {
+			  field.projectiles[this.name] = undefined;
+		}
+		
 	
 	}
 	

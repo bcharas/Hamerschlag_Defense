@@ -8,6 +8,11 @@ var ctx = canvas.getContext("2d");
 //It is divided into "rows", which are paths on which a student is spawned, 
 //and the student moves along to reach their goal at the right side of the player screen.
 function Grid() {
+	this.turretImage = new Image();
+	this.projectile_speed = 10;
+	this.object_size = 50; //size for buttons, turrets, etc.
+	this.just_paused = false;
+	
 	this.ground_color = "#78AB46";
 	this.num_rows = 5;
 
@@ -18,10 +23,17 @@ function Grid() {
  
   //This declaration and for loop initializes the 
   //number of projectiles in each row as 0 to start 
-  this.num_projectiles_per_row = Array(this.num_rows);
-  for (var i = 0; i < this.num_rows; i++) {
-    this.num_projectiles_per_row[i] = 0;
-  }
+	this.num_projectiles_per_row = Array(this.num_rows);
+	for (var i = 0; i < this.num_rows; i++) {
+		this.num_projectiles_per_row[i] = new Object;
+		this.num_projectiles_per_row[i]["top_left"] = 0;
+		this.num_projectiles_per_row[i]["bottom_left"] = 0;
+		this.num_projectiles_per_row[i]["whole_left"] = 0;
+		this.num_projectiles_per_row[i]["top_right"] = 0;
+		this.num_projectiles_per_row[i]["bottom_right"] = 0;
+		this.num_projectiles_per_row[i]["whole_right"] = 0;
+		this.num_projectiles_per_row[i]["out_of_bounds"] = 0;
+	} //was originally 0, changed it to new object()
  
 	this.field_left = -50;
 	this.field_right = this.field_left + this.field_width;
@@ -29,7 +41,8 @@ function Grid() {
 	this.field_bottom = this.field_top + this.field_height;
 	this.row_height = this.field_height / this.num_rows;
 	this.row_width = this.field_width;
-	this.time_until_student_spawn = 10000;
+	this.max_time_until_student_spawn = 5000;
+	this.time_until_student_spawn = this.max_time_until_student_spawn;
 	this.students = new Object();
 	this.students_seen = 0;
 	this.projectiles_currently_in_air = 0;
@@ -51,11 +64,13 @@ function Grid() {
 			}
 		}
 	}
-	this.obstruction_spawner = new obstruction_spawner(300, 50); //TODO: FIX ANY MAGIC NUMBERS
+	this.obstruction_spawner = undefined;
+	//this.obstruction_spawner = new obstruction_spawner(300, 50); //TODO: FIX ANY MAGIC NUMBERS
 	this.obstructions = new Object();
 	this.obstruction_count = 0;
-	
-}
+	this.mid_x = this.field_width / 2;
+	this.mid_y = (this.field_bottom - this.field_top) / 2;
+	}
 
 
 //draws the game background and rows that the students approach along
@@ -63,13 +78,9 @@ function make_field() {
 	var sky_color = "#00ccFF";
 	ctx.fillStyle = sky_color;
 	ctx.fillRect(0, 0, canvas.width, canvas.height);
-	//ctx.globalAlpha = 0.2;
 	var skyImage = new Image();
 	skyImage.src = 'sky.jpg';
 	ctx.drawImage(skyImage, 0, 0);
-	/*skyImage.onload = function(){
-		ctx.drawImage(skyImage, 0, 0);
-	}*/
 	//ctx.fillStyle = field.ground_color;
 	ctx.fillStyle = "#78AB46";
 	ctx.fillRect(field.field_left, field.field_top, field.field_width, field.field_height);
@@ -93,7 +104,8 @@ function spawn_handler() {
 	field.time_until_student_spawn -= timerDelay;
 	player_turret.time_between_shots_fired -= timerDelay;
 	if (field.time_until_student_spawn <= 0) {
-		field.time_until_student_spawn = 10000;
+		field.time_until_student_spawn = field.max_time_until_student_spawn;
+		//field.time_until_student_spawn = 10000;
 		//var mob = new student(random_row());
 		var mob = new student(random_row());
 		field.students[mob.name] = mob;
@@ -115,12 +127,104 @@ function spawn_handler() {
 					var launch_angle = current_turret.get_launch_angle();
 					field.projectiles[String(field.projectiles_fired)] = new Auto_projectile(current_turret.x_center, current_turret.y_center, launch_angle);
 				}
-				else {
-					console.log("that.... wasn't supposed to happen");
-				}
 			}
 		}
 
+	}
+}
+
+//DO I NEED TO REDO THIS WITHOUT THE MIDPOINT COUNTING DOUBLE?
+function get_quadrant(x, y, row) {
+	if ((x <= 0) || (y <= field.field_top) || (y >= field.field_bottom)) {
+		return "out_of_bounds";
+	}
+	var mid_x = field.field_right / 2;
+	var mid_y = field.field_top + (field.field_height / 2);
+	var middle_row = undefined;
+	if ((field.num_rows / 2) !== Math.floor(field.num_rows / 2)) {
+		middle_row = Math.floor(field.num_rows / 2);
+	}
+	if (middle_row !== undefined) {
+		if (x < mid_x) {
+			if (row < middle_row) {
+				return "top_left";			
+			}
+			else if (row > middle_row) {
+				return "bottom_left";			
+			}
+			else {
+				return "whole_left";
+			}		
+		}
+		else {
+			if (row < middle_row) {
+				return "top_right";			
+			}
+			else if (row > middle_row) {
+				return "bottom_right";			
+			}
+			else {
+				return "whole_right";
+			}		
+			}		
+		}
+	else {
+		if (x < mid_x) {
+			if (y < mid_y) {
+				return "top_left";			
+			}
+			else{
+				return "bottom_left";			
+			}
+		}
+		else {
+			if (y < mid_y) {
+				return "top_right";			
+			}
+			else {
+				return "bottom_right";			
+			}
+		}		
+	}
+}
+
+function increment_quadrants(row, quadrant) {
+	if (field.num_projectiles_per_row[row] !== undefined)	{
+		if (this.quadrant === "whole_left") {
+			field.num_projectiles_per_row[row][quadrant]++;
+			field.num_projectiles_per_row[row]["top_left"]++;
+			field.num_projectiles_per_row[row]["bottom_left"]++;
+			this.in_middle = true;
+		}
+		else if (this.quadrant === "whole_right") {
+			field.num_projectiles_per_row[row][quadrant]++;
+			field.num_projectiles_per_row[row]["top_right"]++;
+			field.num_projectiles_per_row[row]["bottom_right"]++;
+			this.in_middle = true;
+		}
+		else {
+			field.num_projectiles_per_row[row][quadrant]++;
+		}
+	}
+}
+
+function decrement_quadrants(row, quadrant) {
+	if (field.num_projectiles_per_row[row] !== undefined)	{
+		if (this.quadrant === "whole_left") {
+			field.num_projectiles_per_row[row][quadrant]--;
+			field.num_projectiles_per_row[row]["top_left"]--;
+			field.num_projectiles_per_row[row]["bottom_left"]--;
+			this.in_middle = true;
+		}
+		else if (this.quadrant === "whole_right") {
+			field.num_projectiles_per_row[row][quadrant]--;
+			field.num_projectiles_per_row[row]["top_right"]--;
+			field.num_projectiles_per_row[row]["bottom_right"]--;
+			this.in_middle = true;
+		}
+		else {
+			field.num_projectiles_per_row[row][quadrant]--;
+		}
 	}
 }
 /*

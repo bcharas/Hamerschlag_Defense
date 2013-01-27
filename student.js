@@ -5,8 +5,9 @@ function student(row) {
 	field.students_seen += 1;
 	this.x = field.field_left;
 	this.row = row;
-	this.size = 50;
+	this.size = field.object_size;
 	this.y = field.field_top + (row * field.row_height);
+	this.quadrant = get_quadrant(this.x, this.y, this.row);
 	this.x_center = this.x + (this.size / 2);
 	this.y_center = this.y + (field.row_height / 2);
 	this.speed = 10;
@@ -34,9 +35,11 @@ function student(row) {
 		projs_in_row_above = largeNumber;
 	}
     if (projs_in_row_below < projs_in_row && projs_in_row_below <= projs_in_row_above) {
+		console.log("dodged.");
 		return (row_num + 1);
     }
     else if (projs_in_row_above < projs_in_row && projs_in_row_above <= projs_in_row_below) {
+		console.log("dodged.");
 		return (row_num - 1);
     }  
     else {       
@@ -49,23 +52,28 @@ function student(row) {
     //This section with "projs_in_rows" controls the student's ability
     //to gauge how many projectile are in a row in order to change
     //rows accordingly.
-		var projs_in_row = field.num_projectiles_per_row[this.row];
-		if (projs_in_row >= 2) {
+		this.quadrant = get_quadrant(this.x, this.y, this.row);
+		var projs_in_row = field.num_projectiles_per_row[this.row][this.quadrant];
+		if ((projs_in_row >= 2) && (this.x >= 0)){
 			//The value of -1 marks a row that can't be moved to, such 
 			//as a row above the top of the board or below the bottom
 			var projs_in_row_above = -1;
 			if (this.row !== 0) {
-				projs_in_row_above = field.num_projectiles_per_row[this.row - 1];
+				var quadrant_of_above_row = get_quadrant(this.x, this.y - field.row_height, this.row - 1);
+				projs_in_row_above = field.num_projectiles_per_row[this.row - 1][quadrant_of_above_row];
+			
 			}
 			var projs_in_row_below = -1;
 			if (this.row !== (field.num_rows - 1)) {
-				projs_in_row_below = field.num_projectiles_per_row[this.row + 1];
+				var quadrant_of_below_row = get_quadrant(this.x, this.y + field.row_height, this.row + 1);
+				projs_in_row_below = field.num_projectiles_per_row[this.row + 1][quadrant_of_below_row];
 			} 
 			var new_row = this.get_row_with_min_projectiles(projs_in_row_below, 
 							  projs_in_row, projs_in_row_above, this.row);
 			this.row = new_row;
 			this.y = field.field_top + (this.row * field.row_height);
 			this.y_center = this.y + (field.row_height / 2);
+			this.quadrant = get_quadrant(this.x, this.y, this.row);
 			
 		}
 		if ((this.x + this.size) < field.field_right) {

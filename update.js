@@ -40,9 +40,9 @@ function update_all_health() {
 }
 
 function update_handler() {
-	update_all_students();
 	update_all_obstructions();
 	update_all_projectiles();
+	update_all_students();
 	update_all_turrets();
 	update_all_health();
 }
