@@ -17,6 +17,12 @@ function student(row) {
 	this.just_knocked_back = false;
 	this.stand_or_walk = 0;
 	
+	this.random_student_type = function() {
+		var type_num = Math.floor(Math.random() * 4.99);
+		return type_num;	
+	}
+	this.student_type = this.random_student_type();
+	this.sprite_x = this.student_type * 120;
 	//draws student on the field
 	this.draw_student = function () {
 		/*ctx.fillStyle = "#FF0000";
@@ -24,7 +30,7 @@ function student(row) {
 		ctx.strokeRect(this.x, this.y, this.size, field.row_height);*/
 		var studentSprites = new Image();
 		studentSprites.src = "spriteSheet.png";
-		ctx.drawImage(studentSprites, 0, ((this.stand_or_walk % 4) * 120), 120, 120, this.x, this.y, field.row_height, field.row_height);
+		ctx.drawImage(studentSprites, this.sprite_x, ((this.stand_or_walk % 4) * 120), 120, 120, this.x, this.y, field.row_height, field.row_height);
 		this.stand_or_walk++;
 	}
   
