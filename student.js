@@ -5,7 +5,7 @@ function student(row) {
 	field.students_seen += 1;
 	this.x = field.field_left;
 	this.row = row;
-	this.size = field.object_size;
+	this.size = 120; //field.object_size;
 	this.y = field.field_top + (row * field.row_height);
 	this.quadrant = get_quadrant(this.x, this.y, this.row);
 	this.x_center = this.x + (this.size / 2);
@@ -15,12 +15,17 @@ function student(row) {
 	this.health = 1
 	this.health_bar = new student_health_bar(this);
 	this.just_knocked_back = false;
+	this.stand_or_walk = 0;
 	
 	//draws student on the field
 	this.draw_student = function () {
-		ctx.fillStyle = "#FF0000";
+		/*ctx.fillStyle = "#FF0000";
 		ctx.fillRect(this.x, this.y, this.size, field.row_height);
-		ctx.strokeRect(this.x, this.y, this.size, field.row_height);
+		ctx.strokeRect(this.x, this.y, this.size, field.row_height);*/
+		var studentSprites = new Image();
+		studentSprites.src = "spriteSheet.png";
+		ctx.drawImage(studentSprites, 0, ((this.stand_or_walk % 4) * 120), 120, 120, this.x, this.y, field.row_height, field.row_height);
+		this.stand_or_walk++;
 	}
   
   //This function takes the number of projectiles in three consecutive 
