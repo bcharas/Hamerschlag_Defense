@@ -54,7 +54,7 @@ function Turret(x, y) {
 //establishes parameters and functions for each projectile object fired by turrets
 function Projectile(launch_x, launch_y, target_x, target_y) {
 	this.size = 5;
-	this.speed = 3 * field.projectile_speed;
+	this.speed = field.projectile_speed;
 	this.damage = .25; 
 	this.launch_x = launch_x;
 	this.launch_y = launch_y;

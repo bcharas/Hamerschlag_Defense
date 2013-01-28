@@ -16,21 +16,26 @@ function Button(button, funct, default_position) {
 	button.color = "#00FFBB";
 	button.inverted_color = "#ff0055";//TODO: Add color inverter function
 	button.press = function() {
-		button.funct();
-		button.position = !button.position;
-		button.update_button();
+		if (field.game_is_over === false) {
+			button.funct();
+			button.position = !button.position;
+			button.update_button();
+		}
 	}
 	button.update_button = function() {
-		if (button.position === button.default_position) {
-			ctx.fillStyle = button.color;
-			ctx.fillRect(button.x, button.y, button.size, button.size);
+		if (field.game_is_over === false) {
+			if (button.position === button.default_position) {
+				ctx.fillStyle = button.color;
+				ctx.fillRect(button.x, button.y, button.size, button.size);
+			}
+			else {
+				ctx.fillStyle = button.inverted_color;
+				ctx.fillRect(button.x, button.y, button.size, button.size);
+			}
+			console.log("here!");
+			ctx.fillStyle = "#000000";
+			ctx.strokeRect(button.x, button.y, button.size, button.size);
 		}
-		else {
-			ctx.fillStyle = button.inverted_color;
-			ctx.fillRect(button.x, button.y, button.size, button.size);
-		}
-		ctx.fillStyle = "#000000";
-		ctx.strokeRect(button.x, button.y, button.size, button.size);
 	}
 }
 

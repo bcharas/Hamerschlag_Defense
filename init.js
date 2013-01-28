@@ -52,54 +52,51 @@ function step() {
 	your_health.update_health_bar();
 	if (field.game_is_over === false){
 
-    /* If this is true, all the students on a level 
-     * have been cleared. 
-     */
-    if (no_students_on_grid_at_end_of_level() == true) {
-      num_levels_played++;
-      //If this is true, the player won the game!
-      if (num_levels_played >= max_num_levels) {
-        ctx.fillStyle = "rgba(0, 0, 0, .5)";
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
-        ctx.fillStyle = "#FFFFFF";
-        ctx.font = "50px Arial";
-        ctx.textAlign = "center";
-        ctx.fillText("You've defeated the student " + 
-                    "body!", canvas.width / 2, canvas.height / 2); 
-      }
-      /* This block indicates that the game is moving to a harder 
-       * level.
-       */
-      else {
-        pauseForTransition();
-        var max_students_on_next_level = max_students_on_this_level += 5;
-        next_level(max_students_on_next_level);
-      }  
-    }
-		else {
-      if (field.paused === false) {
-				make_field();
-				spawn_handler();
-				update_handler();
-				spawn_timer();
-				player_turret.update_turret();
-				player_turret.target.update_target();
-				pause_handler();
-				field.obstruction_spawner.update();
-				field.just_paused = false;				
-				field.turretImage.src = "hamerschlag.png";
-				ctx.drawImage(field.turretImage, 1190, 210);
-			}
+		/* If this is true, all the students on a level 
+		 * have been cleared. 
+		 */
+		if (no_students_on_grid_at_end_of_level() == true) {
+		  num_levels_played++;
+		  //If this is true, the player won the game!
+		  if (num_levels_played >= max_num_levels) {
+			ctx.fillStyle = "rgba(0, 0, 0, .5)";
+			ctx.fillRect(0, 0, canvas.width, canvas.height);
+			ctx.fillStyle = "#FFFFFF";
+			ctx.font = "50px Arial";
+			ctx.textAlign = "center";
+			ctx.fillText("You've defeated the student " + 
+						"body!", canvas.width / 2, canvas.height / 2); 
+		  }
+		  /* This block indicates that the game is moving to a harder 
+		   * level.
+		   */
+		  else {
+			pauseForTransition();
+			var max_students_on_next_level = max_students_on_this_level += 5;
+			next_level(max_students_on_next_level);
+		  }  
+		}
 			else {
-				if (field.just_paused === false) {
-					field.just_paused = true;
-					ctx.fillStyle = "#000000";
-					ctx.font = "15px Arial";
-					ctx.fillText("Paused!", (field.pause_button.x + (field.pause_button.size / 2)), (field.pause_button.y + (1.5 * field.pause_button.size)));
-					draw_play_button();
+				if (field.paused === false) {
+					make_field();
+					spawn_handler();
+					update_handler();
+					spawn_timer();
+					pause_handler();
+					field.obstruction_spawner.update();
+					field.just_paused = false;				
+
 				}
-			}
-	  }
+				else {
+					if (field.just_paused === false) {
+						field.just_paused = true;
+						ctx.fillStyle = "#000000";
+						ctx.font = "15px Arial";
+						ctx.fillText("Paused!", (field.pause_button.x + (field.pause_button.size / 2)), (field.pause_button.y + (1.5 * field.pause_button.size)));
+						draw_play_button();
+					}
+				}
+		  }
   }
 }
 

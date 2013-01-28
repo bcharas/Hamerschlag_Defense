@@ -114,16 +114,15 @@ function make_field() {
 //spawns new students (in a random row) and new projectiles (aimed at 
 //player target) on an interval
 function spawn_handler() {
-  if (field.students_seen >= max_students_on_this_level) {
-    field.time_until_student_spawn = 0;
-    player_turret.time_between_shots_fired = 0;
-  }
-  else {
-    field.time_until_student_spawn -= timerDelay;
-    player_turret.time_between_shots_fired -= timerDelay;
+	/*if (field.students_seen >= max_students_on_this_level) {
+		field.time_until_student_spawn = 0;
+		//player_turret.time_between_shots_fired = 0;
+	}*/
+	if (field.students_seen <= max_students_on_this_level) {
+		field.time_until_student_spawn -= timerDelay;
+		player_turret.time_between_shots_fired -= timerDelay;
 	}
-
-  if (field.time_until_student_spawn <= 0 
+	if (field.time_until_student_spawn <= 0 
       && field.students_seen < max_students_on_this_level) {
 		field.time_until_student_spawn = field.max_time_until_student_spawn;
 		//field.time_until_student_spawn = 10000;

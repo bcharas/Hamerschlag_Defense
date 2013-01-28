@@ -44,5 +44,9 @@ function update_handler() {
 	update_all_projectiles();
 	update_all_students();
 	update_all_turrets();
+	player_turret.update_turret();
+	player_turret.target.update_target();
+	field.turretImage.src = "hamerschlag.png";
+	ctx.drawImage(field.turretImage, 1190, 210);
 	update_all_health();
 }

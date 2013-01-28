@@ -16,6 +16,7 @@ function player_health() {
 		}
 		else {
 			field.game_is_over = true;
+			console.log("end step");
 			end_game();
 		}
 	}
