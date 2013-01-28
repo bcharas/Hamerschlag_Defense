@@ -99,9 +99,7 @@ function step() {
           player_turret.target.update_target();
           pause_handler();
           field.obstruction_spawner.update();
-          field.just_paused = false;				
-          field.turretImage.src = "hamerschlag.png";
-          ctx.drawImage(field.turretImage, 1190, 210);
+          field.just_paused = false;
         }
         else {
           if (field.just_paused === false) {

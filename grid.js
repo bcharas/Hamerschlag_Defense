@@ -93,21 +93,22 @@ function make_field() {
 	var skyImage = new Image();
 	skyImage.src = 'sky.jpg';
 	ctx.drawImage(skyImage, 0, 0);
-	//ctx.fillStyle = field.ground_color;
-	ctx.fillStyle = "#78AB46";
-	ctx.fillRect(field.field_left, field.field_top, field.field_width, field.field_height);
-	ctx.fillStyle = "#000000";
+	var grassImage = new Image();
+	grassImage.src = 'grass.jpg';
+	ctx.drawImage(grassImage, 0, 200, field.field_width, 550);
 	for (var i = 0; i < field.num_rows; i++) {
 		ctx.strokeRect(field.field_left, (field.field_top + (field.row_height * i)), field.field_width, field.row_height);	
 	}
-	//UNCOMMENT WHEN DONE, THIS IS THE GRASS
-	/*var grassImage = new Image();
-	grassImage.src = 'grass.jpg';
-	for (var row = 0; row < field.num_rows; row++) {
-		var y_position = field.field_top + (row * field.row_height);
-		ctx.drawImage(grassImage, 0, y_position, field.row_width, field.row_height, field.field_left, y_position, field.row_width, field.row_height);
-	}*/
-
+	var bakerImage = new Image();
+	bakerImage.src = 'baker.png';
+	ctx.drawImage(bakerImage, -230, 44, 1600, 180);
+	field.turretImage.src = "hamerschlag.png";
+	ctx.drawImage(field.turretImage, 1190, 180, 417, 578);
+	var dohertyImage = new Image();
+	dohertyImage.src = 'doherty.png';
+	for(var i = 0; i < 4; i++){
+		ctx.drawImage(dohertyImage, (400 * i) - 320, 670, 704, 231);
+	}
 }
 
 

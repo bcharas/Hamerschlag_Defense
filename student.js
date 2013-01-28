@@ -15,6 +15,7 @@ function student(row) {
 	this.health = 1
 	this.health_bar = new student_health_bar(this);
 	this.just_knocked_back = false;
+	this.student_type = Math.floor(Math.random() * 6);
 	this.stand_or_walk = 0;
 	
 	//draws student on the field
@@ -24,7 +25,7 @@ function student(row) {
 		ctx.strokeRect(this.x, this.y, this.size, field.row_height);*/
 		var studentSprites = new Image();
 		studentSprites.src = "spriteSheet.png";
-		ctx.drawImage(studentSprites, 0, ((this.stand_or_walk % 4) * 120), 120, 120, this.x, this.y, field.row_height, field.row_height);
+		ctx.drawImage(studentSprites, this.student_type * 120, ((this.stand_or_walk % 4) * 120), 120, 120, this.x, this.y, field.row_height, field.row_height);
 		this.stand_or_walk++;
 	}
   
