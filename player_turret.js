@@ -72,7 +72,7 @@ function Projectile(launch_x, launch_y, target_x, target_y) {
 	this.row = Math.floor((this.y - field.field_top) / field.row_height);
 	this.quadrant = get_quadrant(this.x, this.y, this.row);
 	//field.num_projectiles_per_row[this.row]++;
-	console.log("traceA");
+	//console.log("traceA");
 	increment_quadrants(this.row, this.quadrant);
 	    
 	//This code checks if a projectile has changed rows. If so, it adjusts 
@@ -86,7 +86,7 @@ function Projectile(launch_x, launch_y, target_x, target_y) {
 			if (new_row !== -1 && new_row !== this.row && this.x >= 0) {
 				//field.num_projectiles_per_row[new_row]++;
 				this.quadrant = get_quadrant(this.x, this.y, this.row);
-				console.log("traceB");
+				//console.log("traceB");
 				increment_quadrants(new_row, this.quadrant);
 			}
 		}

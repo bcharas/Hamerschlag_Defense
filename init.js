@@ -46,9 +46,38 @@ function draw_play_button() {
 //Once the round has started, all functions are 
 //called from either here or an event listener.
 function step() {
+  function pauseForTransition() {
+    
+  }
 	your_health.update_health_bar();
 	if (field.game_is_over === false){
-			if (field.paused === false) {
+
+    /* If this is true, all the students on a level 
+     * have been cleared. 
+     */
+    if (no_students_on_grid_at_end_of_level() == true) {
+      num_levels_played++;
+      //If this is true, the player won the game!
+      if (num_levels_played >= max_num_levels) {
+        ctx.fillStyle = "rgba(0, 0, 0, .5)";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = "#FFFFFF";
+        ctx.font = "50px Arial";
+        ctx.textAlign = "center";
+        ctx.fillText("You've defeated the student " + 
+                    "body!", canvas.width / 2, canvas.height / 2); 
+      }
+      /* This block indicates that the game is moving to a harder 
+       * level.
+       */
+      else {
+        pauseForTransition();
+        var max_students_on_next_level = max_students_on_this_level += 5;
+        next_level(max_students_on_next_level);
+      }  
+    }
+		else {
+      if (field.paused === false) {
 				make_field();
 				spawn_handler();
 				update_handler();
@@ -70,7 +99,8 @@ function step() {
 					draw_play_button();
 				}
 			}
-	}
+	  }
+  }
 }
 
 function end_game() {
@@ -101,7 +131,7 @@ function init() {
 	setInterval(step, timerDelay);
 }
 
-function new_level(max_num_students) { 
+function next_level(max_num_students) { 
 //Below are some necessary globals for this to function.
   timerDelay = 100;
   field = new Grid();
