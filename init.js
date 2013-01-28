@@ -100,10 +100,24 @@ function init() {
 	field.obstruction_spawner = new obstruction_spawner(((canvas.width - field.field_right) / 2), .9 * canvas.height);
 	setInterval(step, timerDelay);
 }
+
+function new_level(max_num_students) { 
 //Below are some necessary globals for this to function.
-var timerDelay = 100;
-var field = new Grid();
-var player_turret = new Turret(canvas.width - 100, (canvas.height - 50)/2);
-var auto_turret_1 = new Auto_turret(.75 *  canvas.width, field.field_top / 2);
-var first_student = new student(random_row());
-init();
+  timerDelay = 100;
+  field = new Grid();
+  player_turret = new Turret(canvas.width - 100, (canvas.height - 50)/2);
+  auto_turret_1 = new Auto_turret(.75 *  canvas.width, field.field_top / 2);
+  first_student = new student(random_row());
+  max_students_on_this_level = max_num_students;
+  init();
+}
+
+function play_game(num_levels, num_students_first_level) {
+  moveToNextLevel = false;
+  pauseTimer = 0;
+  num_levels_played = 0;
+  max_num_levels = num_levels;
+  next_level(num_students_first_level);
+}
+
+play_game(1, 3);
