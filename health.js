@@ -20,6 +20,7 @@ function player_health() {
 			end_game();
 		}
 	}
+	field.health_list.push(this);
 }
 
 function student_health_bar(student) {
@@ -30,17 +31,26 @@ function student_health_bar(student) {
 	this.start_y = student.y - (.15 * student.size);
 	field.healths_recorded++;
 	this.name = String(field.healths_recorded);
-	this.update_health_bar = function() {
-	this.start_x = student.x - (.125 * student.size);
-	this.start_y = student.y - (.15 * student.size);
-	if (this.current_health < 1){
-			health_bar(this);
+	this.has_graduated = false;
+	this.graduate = function (student_index){
+		var health_index = field.health_list.indexOf(this);
+		field.health_list.splice(health_index, 1);
+		field.student_list.splice(student_index, 1);	
 	}
-  }
+	this.update_health_bar = function(health_index) {
+		this.start_x = student.x - (.125 * student.size);
+		this.start_y = student.y - (.15 * student.size);
+		if (this.current_health <= 0){
+			field.health_list.splice(health_index, 1);
+		}
+		else if (this.current_health < 1){
+			health_bar(this);
+		}
+	}
+	field.health_list.push(this);
 }
 
 function obstruction_health(obstruction) {
-	console.log("make health bar");
 	this.current_health = obstruction.health;
 	this.width = 1.25 * obstruction.size;
 	this.height = .1 * obstruction.size;
@@ -48,8 +58,11 @@ function obstruction_health(obstruction) {
 	this.start_y = obstruction.y - (.15 * obstruction.size);
 	this.name = String(field.healths_recorded);
 	field.healths_recorded++;
-	this.update_health_bar = function() {
+	this.update_health_bar = function(index) {
 		this.start_x = obstruction.x - (.125 * obstruction.size);
+		if (this.current_health <= 0) {
+			field.health_list.splice(index, 1);
+		}
 		if (this.current_health < 1){
 			health_bar(this);
 		}	
@@ -80,3 +93,6 @@ function health_bar(bar) {
 		ctx.fillRect(bar.start_x + offset_x, bar.start_y + offset_y, bar.current_health * (bar.width - (2 * offset_x)), bar.height - (2 * offset_y));
 	}
 }
+
+//LEVELS END ABRUPTLY....
+//HEALTH BARS STILL DON'T DESPAWN.

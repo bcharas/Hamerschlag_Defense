@@ -14,21 +14,17 @@ function Auto_turret(x, y) {
 	this.projectile_speed = field.projectile_speed;
 	this.find_nearest_student = function() {
 		var min_distance = undefined;
-		for (var i = 0; i < field.students_seen; i++){
-				if (field.students[String(i)] !== undefined) {
-					var this_student = field.students[String(i)];
-					//field.students[String(i)].update();
-					//var x_distance = Math.abs(this_student.x - this.x_center);
-					var x_distance = (this_student.x - this.x_center);
-					var y_distance = Math.abs(this_student.y_center - this.y_center);
-					var distance = Math.sqrt(Math.pow(x_distance, 2) + Math.pow(y_distance, 2));
-					if ((min_distance === undefined) || (distance < min_distance)){
-						this.nearest_student_distance = distance;
-						this.nearest_student = this_student;
-						this.nearest_student_x_distance = x_distance;
-						this.nearest_student_y_distance = y_distance;
-					}
-				}
+		for (var i = 0; i < field.student_list.length; i++) {
+			var this_student = field.student_list[i];
+			var x_distance = (this_student.x - this.x_center);
+			var y_distance = Math.abs(this_student.y_center - this.y_center);
+			var distance = Math.sqrt(Math.pow(x_distance, 2) + Math.pow(y_distance, 2));
+			if ((min_distance === undefined) || (distance < min_distance)){
+				this.nearest_student_distance = distance;
+				this.nearest_student = this_student;
+				this.nearest_student_x_distance = x_distance;
+				this.nearest_student_y_distance = y_distance;
+			}				
 		}	
 	}
 	
@@ -57,7 +53,6 @@ function Auto_turret(x, y) {
 	}
 	
 	this.update_turret = function() {
-		//this.find_nearest_student();
 		ctx.fillStyle = "#551A8B"; //purple
 		ctx.fillRect(this.x, this.y, this.size, this.size);
 		ctx.strokeRect(this.x, this.y, this.size, this.size);
@@ -65,7 +60,6 @@ function Auto_turret(x, y) {
 	ctx.fillStyle = "#551A8B"; //purple
 	ctx.fillRect(this.x, this.y, this.size, this.size);
 	ctx.strokeRect(this.x, this.y, this.size, this.size);
-	//console.log("trace");
 }
 
 
@@ -75,36 +69,37 @@ function Auto_projectile(launch_x, launch_y, launch_angle) {
 	this.damage = .25; 
 	this.launch_x = launch_x;
 	this.launch_y = launch_y;
+	this.launch_angle = launch_angle;
 	this.x_speed = this.speed * Math.sin(launch_angle);
 	this.y_speed = this.speed * Math.cos(launch_angle);
 	this.x = launch_x;
 	this.y = launch_y;
-	this.name = String(field.projectiles_fired);
 	this.in_middle = false;
-	field.projectiles_fired++;
 	
 	this.row = Math.floor((this.y - field.field_top) / field.row_height);
-	this.quadrant = get_quadrant(this.x, this.y, this.row);
-	//console.log("traceC");
-	//console.log(this.row);
-	//console.log(this.quadrant);
-	increment_quadrants(this.row, this.quadrant);
+	
+	
+	//this.quadrant = get_quadrant(this.x, this.y, this.row);
+	//increment_quadrants(this.row, this.quadrant);
+	
+	
 	//This code checks if a projectile has changed rows. If so, it adjusts 
     //the values of projectiles in each row accordingly 
-    this.check_for_row_change = function() {
+    /*
+	this.check_for_row_change = function() {
 		var new_row = Math.floor((this.y - field.field_top) / field.row_height);
 		if (new_row !== this.row || this.x <= 0) {
 		  //field.num_projectiles_per_row[this.row]--;
-		  decrement_quadrants(this.row, this.quadrant);
+		 // decrement_quadrants(this.row, this.quadrant);
 		  
 		  if (new_row !== -1 && new_row !== this.row && this.x >= 0)
 			//field.num_projectiles_per_row[new_row]++;
-			this.quadrant = get_quadrant(this.x, this.y, this.row);
+			//this.quadrant = get_quadrant(this.x, this.y, this.row);
 			//console.log("traceD");
-			increment_quadrants(new_row, this.quadrant);
+			//increment_quadrants(new_row, this.quadrant);
 		}
 		this.row = new_row;
-	}
+	}*/
 	
 	
 
@@ -112,17 +107,15 @@ function Auto_projectile(launch_x, launch_y, launch_angle) {
 	//occurred.If it has not, it moves the projectile according to it's speed
 	//and then draws it at it's new position. See collision_check() for the
 	//case when a collision occurs.
-	this.update_projectile = function() {		
-		//this.check_for_row_change();
-		this.collision_check();
+	this.update_projectile = function(index) {		
 		this.x += this.x_speed;
 		this.y += this.y_speed;
-		this.check_for_row_change();
+		this.row = Math.floor((this.y - field.field_top) / field.row_height);
 		ctx.fillStyle = "#551A8B"; //purple
 		ctx.fillRect(this.x, this.y, this.size, this.size);
 		ctx.strokeRect(this.x, this.y, this.size, this.size);
 		if (this.x <= 0) {
-			  field.projectiles[this.name] = undefined;
+			  field.projectile_list.splice(index, 1);
 		}
 		
 	

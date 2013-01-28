@@ -44,9 +44,6 @@ function Turret(x, y) {
 		ctx.fillStyle = "#551A8B"; //purple
 		ctx.fillRect(this.x, this.y, this.size, this.size);
 		ctx.strokeRect(this.x, this.y, this.size, this.size);
-		//var turretImage = new Image();
-		/*turretImage.src = "hamerschlag.png";
-		ctx.drawImage(turretImage, 1190, 210);*/
 	}
 	
 }
@@ -70,35 +67,12 @@ function Projectile(launch_x, launch_y, target_x, target_y) {
 	this.x_speed = this.speed * Math.cos(this.launch_angle);
 	this.y_speed = this.speed * Math.sin(this.launch_angle);
 	this.row = Math.floor((this.y - field.field_top) / field.row_height);
-	this.quadrant = get_quadrant(this.x, this.y, this.row);
-	//field.num_projectiles_per_row[this.row]++;
-	//console.log("traceA");
-	increment_quadrants(this.row, this.quadrant);
-	    
-	//This code checks if a projectile has changed rows. If so, it adjusts 
-    //the values of projectiles in each row accordingly 
-    this.check_for_row_change = function() {
-		var new_row = Math.floor((this.y - field.field_top) / field.row_height);
-		if (new_row !== this.row || this.x <= 0) {
-			//field.num_projectiles_per_row[this.row]--;
-			decrement_quadrants(this.row, this.quadrant);
-		  
-			if (new_row !== -1 && new_row !== this.row && this.x >= 0) {
-				//field.num_projectiles_per_row[new_row]++;
-				this.quadrant = get_quadrant(this.x, this.y, this.row);
-				//console.log("traceB");
-				increment_quadrants(new_row, this.quadrant);
-			}
-		}
-		this.row = new_row;
-	}
+
 	//This function first calls collision_check to see if a collision has
 	//occurred.If it has not, it moves the projectile according to it's speed
 	//and then draws it at it's new position. See collision_check() for the
 	//case when a collision occurs.
-	this.update_projectile = function() {		
-		//this.check_for_row_change();
-		this.collision_check();
+	this.update_projectile = function(index) {		
 		if (this.launch_y <= this.target_y) {
 			if  (this.launch_x <= this.target_x) {
 				this.x += this.x_speed;
@@ -120,33 +94,32 @@ function Projectile(launch_x, launch_y, target_x, target_y) {
 				this.y -= this.y_speed;			
 			}				
 		}
-		this.check_for_row_change();
+		//this.check_for_row_change();
+		this.row = Math.floor((this.y - field.field_top) / field.row_height);
 		ctx.fillStyle = "#551A8B"; //purple
 		ctx.fillRect(this.x, this.y, this.size, this.size);
 		ctx.strokeRect(this.x, this.y, this.size, this.size);
     
     //This removes projectiles that have gone off the screen
 		if (this.x <= 0) {
-			  field.projectiles[this.name] = undefined;
+			  //field.projectiles[this.name] = undefined;
+			  field.projectile_list.splice(index, 1);
 		}
 	}
-	
-	//this function, called whenever a projectile moves, checks if the
-	//projectile should collide (i.e. they share the same space) with a
-	//student, and if it should, calls the collide function.
-	this.collision_check = function() {
-		for (var i = 0; i < field.students_seen; i++) {
-			if (field.students[String(i)] !== undefined) {
-				var this_student = field.students[String(i)];
-				if ((this.x >= this_student.x) && (this.x <= (this_student.x + this_student.size))){	
-					if ((this.y >= this_student.y) && (this.y <= (this_student.y + field.row_height))){	
-						collide(this, this_student);
-						break;
-					}
-				}
+}
 
+//this function, called whenever a projectile moves, checks if the
+//projectile should collide (i.e. they share the same space) with a
+//student, and if it should, calls the collide function.
+function collision_check(student_index) {
+	var this_student = field.student_list[student_index];
+	for (var i = 0; i < field.projectile_list.length; i++) {
+		var projectile = field.projectile_list[i];
+		if ((projectile.x >= this_student.x) && (projectile.x <= (this_student.x + this_student.size))){	
+			if ((projectile.y >= this_student.y) && (projectile.y <= (this_student.y + field.row_height))){	
+				collide(i, student_index);
 			}
-		}
+		}	
 	}
 }
 
@@ -169,17 +142,22 @@ function Target(x, y) {
 //reduces the colliding student's health according to the damage value of the
 //projectile. If the colliding student's health drops to or below zero, the
 //colliding student is also despawned.
-function collide(projectile, student) {
-	//field.num_projectiles_per_row[(field.projectiles[projectile.name]).row]--;
-	decrement_quadrants(projectile.row, projectile.quadrant); 
-	field.projectiles[projectile.name] = undefined;
+function collide(projectile_index, student_index) {
+	var student = field.student_list[student_index];
+	var projectile = field.projectile_list[projectile_index];
+
+	field.projectile_list.splice(projectile_index, 1);
+	
 	student.health_bar.current_health -= projectile.damage;
 	student.health -= projectile.damage; 
+	
 	if (student.health_bar.current_health <= 0) {
-		field.students[student.name] = undefined;
-		if (student.health_bar !== undefined) {
-			field.healths[student.health_bar.name] = undefined;
+		field.student_list.splice(student_index, 1);
+		field.students_despawned += 1;
+		if (field.students_despawned === max_students_on_this_level) {
+			field.ending_sequence = true;
 		}
 	}
 }
+
 

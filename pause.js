@@ -1,14 +1,3 @@
-/*var field.button_check = function(x, y) {
-	if (x >= field.pause_button.x) && (x <= (field.pause_button.x + field.pause_button.size) {
-		if (y >= field.pause_button.y) && (y <= (field.pause_button.y + field.pause_button.size)) {
-			field.pause_button.press();
-		}
-	}
-		//then check y
-		//then call press if both true
-}
-*/
-
 function Button(button, funct, default_position) {
 	button.funct = funct;
 	button.default_position = default_position;
@@ -32,7 +21,7 @@ function Button(button, funct, default_position) {
 				ctx.fillStyle = button.inverted_color;
 				ctx.fillRect(button.x, button.y, button.size, button.size);
 			}
-			console.log("here!");
+			//console.log("here!");
 			ctx.fillStyle = "#000000";
 			ctx.strokeRect(button.x, button.y, button.size, button.size);
 		}

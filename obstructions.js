@@ -8,10 +8,13 @@ function place_obstruction(x, y) {
 				var row_top = field.field_top + (i * field.row_height)
 				var row_bottom = row_top + field.row_height;
 				if ((y >= row_top) && (y < row_bottom)) { //I suppose, in rare case of tie, bias to upper row
+						//var obstruction = new Obstruction(x, i);
+						//field.obstructions[String(field.obstruction_count)] = obstruction;
+						//field.obstruction_count++;
 						var obstruction = new Obstruction(x, i);
-						field.obstructions[String(field.obstruction_count)] = obstruction;
-						field.obstruction_count++;
-						field.healths[obstruction.health_bar.name] = obstruction.health_bar;
+						field.obstruction_list.push(obstruction);
+						field.health_list.push(obstruction.health_bar);
+						//field.healths[obstruction.health_bar.name] = obstruction.health_bar;
 						return true;
 				}
 			}
@@ -28,13 +31,13 @@ function Obstruction(x, row) {
 	this.row = row;
 	//ADD 2 TO PROJS FOR THIS ROW
 	this.y = field.field_top + (this.row * field.row_height);
-	this.quadrant = get_quadrant(this.x, this.y, this.row);
+	//this.quadrant = get_quadrant(this.x, this.y, this.row);
 	this.decision_value = 3 //how much a student will try to avoid the obstruction, in terms of how many projectiles it's worth
 	//field.num_projectiles_per_row[this.row][this.quadrant] += 2;
-	for (var i = 0; i < this.decision_value; i++) {
+	/*for (var i = 0; i < this.decision_value; i++) {
 		increment_quadrants(this.row, this.quadrant);	
 	}
-	increment_quadrants(this.row, this.quadrant);
+	increment_quadrants(this.row, this.quadrant);*/
 	this.size = field.object_size;
 	this.health = 1;
 	this.health_bar = new obstruction_health(this);
@@ -47,16 +50,16 @@ function Obstruction(x, row) {
 	}
 }
 
-function destroy_obstruction(obstruction) {
-	console.log("health num" + obstruction.health_bar.name);
-	console.log("obst num" + obstruction.name);
+function destroy_obstruction(obstruction_index) {
 	//field.num_projectiles_per_row[this.row] += 2;
-	for (var i = 0; i < obstruction.decision_value; i++) {
+	var obstruction = field.obstruction_list[obstruction_index];
+	/*for (var i = 0; i < obstruction.decision_value; i++) {
 		decrement_quadrants(obstruction.row, obstruction.quadrant);	
-	}
+	}*/
 	//REMOVE 2 TO PROJS FOR THIS ROW
-	field.healths[obstruction.health_bar.name] = undefined;
-	field.obstructions[obstruction.name] = undefined;
+	//field.healths[obstruction.health_bar.name] = undefined;
+	//field.obstructions[obstruction.name] = undefined;
+	field.obstruction_list.splice(obstruction_index, 1);
 }
 
 function obstruction_spawner(x, y){
