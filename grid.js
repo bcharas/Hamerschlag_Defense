@@ -74,6 +74,11 @@ function Grid() {
 	this.books_cost = 75;
 	this.books_timeout = 0;
 	this.font_size = 20;
+	this.turret_spots = [];
+	for(var i = 0; i < 3; i++){
+		this.turret_spots.push(new Turret_placeholder(i * 376 + 264, 100));
+	}
+	this.turret_cost = 200;
 }
 
 function no_students_on_grid_at_end_of_level() {

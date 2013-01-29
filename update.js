@@ -31,6 +31,14 @@ function update_all_turrets() {
 	}
 }
 
+function update_all_turret_spots(){
+	for (var i = 0; i < field.turret_spots.length; i++){
+		if (field.turret_spots[i]) {
+			field.turret_spots[i].update_turret_spot();
+		}
+	}
+}
+
 function update_all_health() {
 	for (var i = 0; i < field.healths_recorded; i++){
 		if (field.healths[String(i)] !== undefined) {
@@ -44,5 +52,6 @@ function update_handler() {
 	update_all_projectiles();
 	update_all_students();
 	update_all_turrets();
+	update_all_turret_spots();
 	update_all_health();
 }
