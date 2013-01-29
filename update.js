@@ -34,6 +34,14 @@ function update_all_turrets() {
 	}
 }
 
+function update_all_turret_spots(){
+	for (var i = 0; i < field.turret_spots.length; i++){
+		if (field.turret_spots[i]) {
+			field.turret_spots[i].update_turret_spot();
+		}
+	}
+}
+
 function update_all_health() {
 	for (var i = 0; i < field.health_list.length; i++) {
 		var this_health_bar = field.health_list[i];
@@ -54,11 +62,20 @@ function update_all_images() {
 
 
 function update_handler() {
-	//update_all_projectiles();
-	//player_turret.update_turret();
-	//player_turret.target.update_target();
+	update_all_projectiles();
+	player_turret.update_turret();
+	player_turret.target.update_target();
 	//update_all_turrets();
 	update_all_obstructions();	
 	update_all_students();
+//<<<<<<< HEAD
+//=======
+	update_all_turrets();
+	update_all_turret_spots();
+	// Doherty is drawn here to put it on top of projectiles
+	for(var i = 0; i < 4; i++){
+		ctx.drawImage(dohertyImage, (400 * i) - 320, 670, 704, 231);
+	}
+//>>>>>>> d7d923849a10a0905be46e4de77bfe544889b432
 	update_all_health();
 }

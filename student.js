@@ -62,7 +62,7 @@ function student(row) {
 			}
 			else {
 				this.dodge_cooldown -= 1;
-				console.log(this.dodge_cooldown);
+				//console.log(this.dodge_cooldown);
 				//this.x += this.speed;
 			}
 		}

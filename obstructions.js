@@ -73,20 +73,18 @@ function obstruction_spawner(x, y){
 	this.update = function() {
 		if(field.books_timeout > 0){
 			ctx.fillStyle = '#ff0000';
-			ctx.textAlign = 'center';
 			var books_text = "Not enough money";
 			field.books_timeout--;
 		}
 		else if (this.placing_mode === false) {
 			ctx.fillStyle = "#000000";
-			ctx.textAlign = "center";
 			var books_text = "Buy books";
 		}
 		else {
 			ctx.fillStyle = "#ffffff";
-			ctx.textAlign = "center";
 			var books_text = "Click to place books";
 		}
+		ctx.textAlign = 'center';
 		ctx.fillText(books_text, canvas.width - field.object_size * 3.5, field.object_size + this.size);
 		ctx.fillRect(this.x, this.y, this.size, this.size);
 		ctx.strokeRect(this.x, this.y, this.size, this.size);

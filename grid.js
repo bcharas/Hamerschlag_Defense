@@ -125,6 +125,7 @@ function Grid() {
 	this.books_cost = 75;
 	this.books_timeout = 0;
 	this.font_size = 20;
+//<<<<<<< HEAD
 	
 	this.get_row_from_y = function(y) {
 		var row_list = field.row_heights;
@@ -155,6 +156,13 @@ function Grid() {
 		return y;
 	}
 	
+//=======
+	this.turret_spots = [];
+	for(var i = 0; i < 3; i++){
+		this.turret_spots.push(new Turret_placeholder(i * 376 + 264, 100));
+	}
+	this.turret_cost = 400;
+//>>>>>>> d7d923849a10a0905be46e4de77bfe544889b432
 }
 
 function no_students_on_grid_at_end_of_level() {
@@ -178,6 +186,7 @@ function make_field() {
 		var this_row_height =  field.row_heights[field.num_rows - 1 - i];
 		ctx.strokeRect(field.field_left, start_y, field.field_width, this_row_height);
 	}
+/* <<<<<<< HEAD
 	ctx.drawImage(field.bakerImage, -230, 44, 1600, 180);
 	update_all_projectiles();
 	update_all_turrets();		
@@ -186,6 +195,16 @@ function make_field() {
 		ctx.drawImage(field.dohertyImage, (400 * i) - 320, 670, 704, 231);
 	}
 
+=======*/
+	//var bakerImage = new Image();
+	//bakerImage.src = 'baker.png';
+	ctx.drawImage(bakerImage, -230, 44, 1600, 180);
+	//field.turretImage.src = "hamerschlag.png";
+	//ctx.drawImage(field.turretImage, 1190, 180, 417, 578);
+	ctx.drawImage(hamerschlagImage, 1190, 180, 417, 578);
+	//var dohertyImage = new Image();
+	//dohertyImage.src = 'doherty.png';
+//>>>>>>> d7d923849a10a0905be46e4de77bfe544889b432
 }
 
 
@@ -225,6 +244,7 @@ function spawn_handler() {
 			for (var i = 0; i < field.turret_list.length; i++){			
 				var current_turret = field.turret_list[i];		
 				if (current_turret.turret_type === "controlled turret") {
+					//console.log("oi!");
 					var projectile = new Projectile(current_turret.x_center, current_turret.y_center, current_turret.target.x, current_turret.target.y);
 					field.projectile_list.push(projectile);					
 				}

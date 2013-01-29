@@ -1,3 +1,21 @@
+function Turret_placeholder(x, y){
+	this.x = x;
+	this.y = y;
+	if(this.timeout === undefined){
+		this.timeout = 0;
+	}
+	this.update_turret_spot = function(){
+		if(this.timeout > 0){
+			ctx.fillStyle = '#ff0000';
+			this.timeout--;
+		} else {
+			ctx.fillStyle = "#551A8B"; //purple
+		}
+		ctx.fillRect(this.x, this.y, field.object_size, field.object_size);
+		ctx.strokeRect(this.x, this.y, field.object_size, field.object_size);
+	}
+}
+
 function Auto_turret(x, y) {
 	this.x = x;
 	this.y = y;
