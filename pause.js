@@ -48,3 +48,13 @@ function pause_button() {
 	}
 	Button(this, this.pause, false);
 }
+
+function start_button() {
+  this.size = 100;
+  this.x = canvas.width / 2;
+  this.y = 7 * canvas.height / 8;
+  this.funct = function () { 
+    next_level(num_students_on_first_level);
+  }
+  Button(this, this.funct, false);
+}
