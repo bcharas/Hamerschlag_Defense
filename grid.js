@@ -90,22 +90,23 @@ function make_field() {
 	var sky_color = "#00ccFF";
 	ctx.fillStyle = sky_color;
 	ctx.fillRect(0, 0, canvas.width, canvas.height);
-	var skyImage = new Image();
-	skyImage.src = 'sky.jpg';
+	//var skyImage = new Image();
+	//skyImage.src = 'sky.jpg';
 	ctx.drawImage(skyImage, 0, 0);
-	var grassImage = new Image();
-	grassImage.src = 'grass.jpg';
+	//var grassImage = new Image();
+	//grassImage.src = 'grass.jpg';
 	ctx.drawImage(grassImage, 0, 200, field.field_width, 550);
 	for (var i = 0; i < field.num_rows; i++) {
 		ctx.strokeRect(field.field_left, (field.field_top + (field.row_height * i)), field.field_width, field.row_height);	
 	}
-	var bakerImage = new Image();
-	bakerImage.src = 'baker.png';
+	//var bakerImage = new Image();
+	//bakerImage.src = 'baker.png';
 	ctx.drawImage(bakerImage, -230, 44, 1600, 180);
-	field.turretImage.src = "hamerschlag.png";
-	ctx.drawImage(field.turretImage, 1190, 180, 417, 578);
-	var dohertyImage = new Image();
-	dohertyImage.src = 'doherty.png';
+	//field.turretImage.src = "hamerschlag.png";
+	//ctx.drawImage(field.turretImage, 1190, 180, 417, 578);
+	ctx.drawImage(hamerschlagImage, 1190, 180, 417, 578);
+	//var dohertyImage = new Image();
+	//dohertyImage.src = 'doherty.png';
 	for(var i = 0; i < 4; i++){
 		ctx.drawImage(dohertyImage, (400 * i) - 320, 670, 704, 231);
 	}
@@ -121,7 +122,21 @@ function spawn_handler() {
 	}
   if (field.time_until_student_spawn <= 0 
       && field.students_seen < max_students_on_this_level) {
-		field.time_until_student_spawn = field.max_time_until_student_spawn;
+    if (field.students_seen <= 3) {
+		  field.time_until_student_spawn = field.max_time_until_student_spawn;
+    }
+    else if (field.students_seen >= (2 * max_students_on_this_level / 3)) {
+      field.time_until_student_spawn = 1000;   
+    }
+    else if (field.students_seen >= (1 * max_students_on_this_level / 2)) {
+      field.time_until_student_spawn = 6000;   
+    }
+    else if (field.students_seen >= (max_students_on_this_level / 3)) {
+      field.time_until_student_spawn = 1000;  
+    }
+    else {
+      field.time_until_student_spawn = 4000;
+    }
 		//field.time_until_student_spawn = 10000;
 		//var mob = new student(random_row());
 		var mob = new student(random_row());
