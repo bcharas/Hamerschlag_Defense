@@ -4,7 +4,15 @@ function spawn_timer() {
 	ctx.textAlign = "center";
 	var spawn_time = String(field.time_until_student_spawn/ 1000);
 	var spawn_msg = "Time to next spawn: ";
-	ctx.fillText(spawn_msg.concat(spawn_time), canvas.width / 2, field.field_top / 2);
+	ctx.fillText(spawn_msg.concat(spawn_time), canvas.width / 2, field.field_top / 4);
+}
+
+function update_money() {
+	ctx.fillStyle = "#000000";
+	ctx.font = field.font_size + "px Arial";
+	ctx.textAlign = "right";
+	ctx.fillText("Money:", canvas.width - field.object_size, field.object_size);
+	ctx.fillText("$" + field.money + "K", canvas.width - field.object_size, field.object_size + 25);
 }
 
 function pause_handler() {
@@ -48,6 +56,7 @@ function draw_play_button() {
 function step() {
 	if (pausingForTransition === true) {
     if (pauseTimer < 30) {
+	  // inter-level screen
       pauseTimer++;
       ctx.fillStyle = "rgba(0, 0, 0, .5)";
       ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -57,6 +66,7 @@ function step() {
       ctx.fillText("Onto the next level", canvas.width / 2, canvas.height / 2);
     }
     else {
+	  // post-inter-level screen
       pausingForTransition = false;
       pauseTimer = 0;
       var max_students_on_next_level = max_students_on_this_level += 5;
@@ -87,7 +97,7 @@ function step() {
          */
         else {
           pausingForTransition = true;
-        }  
+        }
       }
       else {
         if (field.paused === false) {
@@ -95,6 +105,7 @@ function step() {
           spawn_handler();
           update_handler();
           spawn_timer();
+		  update_money();
           player_turret.update_turret();
           player_turret.target.update_target();
           pause_handler();
@@ -106,7 +117,6 @@ function step() {
             field.just_paused = true;
             ctx.fillStyle = "#000000";
             ctx.font = "15px Arial";
-            ctx.fillText("Paused!", (field.pause_button.x + (field.pause_button.size / 2)), (field.pause_button.y + (1.5 * field.pause_button.size)));
             draw_play_button();
           }
         }
@@ -139,7 +149,8 @@ function init() {
 	field.students["0"] = first_student;
 	field.healths["1"] = first_student.health_bar;
 	field.pause_button = new pause_button();
-	field.obstruction_spawner = new obstruction_spawner(((canvas.width - field.field_right) / 2), .9 * canvas.height);
+	field.obstruction_spawner = new obstruction_spawner(canvas.width - field.object_size * 4, field.object_size - field.font_size);
+	//field.obstruction_spawner = new obstruction_spawner(((canvas.width - field.field_right) / 2), .9 * canvas.height);
 	timer = setInterval(step, timerDelay);
 }
 

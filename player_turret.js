@@ -9,12 +9,18 @@ function onMouseDown(event) {
 	field.button_check(x, y);
 	if ((field.game_is_over === false) && (field.paused === false)) {
 		if (field.obstruction_spawner.placing_mode === true) {
-			place_obstruction(x, y);
+			if(place_obstruction(x, y)){
+				field.money -= field.books_cost;
+			}
 			field.obstruction_spawner.placing_mode = false;
 		}
 		else if ((x >= field.obstruction_spawner.x) && (x <= (field.obstruction_spawner.x + field.obstruction_spawner.size))) {
 			if ((y >= field.obstruction_spawner.y) && (y <= (field.obstruction_spawner.y + field.obstruction_spawner.size))) {
-				field.obstruction_spawner.placing_mode = true;
+				if(field.money - field.books_cost >= 0){
+					field.obstruction_spawner.placing_mode = true;
+				} else {
+					field.books_timeout = 20;
+				}
 			}
 		}
 		else {
@@ -176,6 +182,7 @@ function collide(projectile, student) {
 	student.health_bar.current_health -= projectile.damage;
 	student.health -= projectile.damage; 
 	if (student.health_bar.current_health <= 0) {
+		field.money += 50;
 		field.students[student.name] = undefined;
 		if (student.health_bar !== undefined) {
 			field.healths[student.health_bar.name] = undefined;
