@@ -9,15 +9,29 @@ function onMouseDown(event) {
 	field.button_check(x, y);
 	if ((field.game_is_over === false) && (field.paused === false)) {
 		if (field.obstruction_spawner.placing_mode === true) {
-			place_obstruction(x, y);
+			if(place_obstruction(x, y)){
+				field.money -= field.books_cost;
+			}
 			field.obstruction_spawner.placing_mode = false;
 		}
-		else if ((x >= field.obstruction_spawner.x) && (x <= (field.obstruction_spawner.x + field.obstruction_spawner.size))) {
-			if ((y >= field.obstruction_spawner.y) && (y <= (field.obstruction_spawner.y + field.obstruction_spawner.size))) {
+		else if (
+			x >= field.obstruction_spawner.x &&
+			x <= (field.obstruction_spawner.x + field.obstruction_spawner.size) &&
+			y >= field.obstruction_spawner.y &&
+			y <= (field.obstruction_spawner.y + field.obstruction_spawner.size)
+		) {
+			if(field.money - field.books_cost >= 0){
 				field.obstruction_spawner.placing_mode = true;
+			} else {
+				field.books_timeout = 20;
 			}
 		}
-		else {
+		else if (
+			x < field.pause_button.x ||
+			x > (field.pause_button.x + field.pause_button.size) ||
+			y < field.pause_button.y ||
+			y > (field.pause_button.y + field.pause_button.size)
+		) {
 			player_turret.target = new Target(x, y);		
 		}
 	}	
@@ -94,7 +108,6 @@ function Projectile(launch_x, launch_y, target_x, target_y) {
 				this.y -= this.y_speed;			
 			}				
 		}
-		//this.check_for_row_change();
 		var row_top = field.field_top;
 		var row_bottom = row_top + field.row_heights[field.row_heights.length - 1];
 		for (var i = 1; i < field.num_rows; i++) {
@@ -108,14 +121,12 @@ function Projectile(launch_x, launch_y, target_x, target_y) {
 					row_bottom += next_row_height;
 				}
 			}
-		//this.row = Math.floor((this.y - field.field_top) / field.row_height);
 		ctx.fillStyle = "#551A8B"; //purple
 		ctx.fillRect(this.x, this.y, this.size, this.size);
 		ctx.strokeRect(this.x, this.y, this.size, this.size);
     
     //This removes projectiles that have gone off the screen
 		if (this.x <= 0) {
-			  //field.projectiles[this.name] = undefined;
 			  field.projectile_list.splice(index, 1);
 		}
 	}
@@ -169,6 +180,7 @@ function collide(projectile_index, student_index) {
 	if (student.health_bar.current_health <= 0) {
 		field.student_list.splice(student_index, 1);
 		field.students_despawned += 1;
+		field.money += 50;
 		if (field.students_despawned === max_students_on_this_level) {
 			field.ending_sequence = true;
 		}

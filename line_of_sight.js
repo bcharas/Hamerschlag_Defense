@@ -61,7 +61,6 @@ function change_row_using_line_of_sight(student, row) {
 }
 	
 function safest_row_option(above_row_val, row_val, below_row_val, row) {
-	//var safest_row_val = Math.min(above_row_val, row_val, below_row_val);
 	if (above_row_val >= row_val) {
 		if (below_row_val >= row_val) {
 			return row;

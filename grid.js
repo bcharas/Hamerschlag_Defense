@@ -100,12 +100,11 @@ function images(field) {
 		}
 	}
 	
+	field.booksImage = new Image();
+	field.booksImage.src = 'books.png';
+	
 	field.studentSprites = new Image();
-	//field.image_list.push(field.studentSprites);
 	field.studentSprites.src = "spriteSheet.png";
-	//field.studentSprites.draw = function () {
-	//	ctx.drawImage(field.studentSprites, 1200, 125, 417, 578);	
-	//}
 
 
 }
@@ -129,6 +128,10 @@ function Grid() {
 	}
 	this.obstruction_spawner = undefined;
 	object_storage_lists(this);
+	this.money = 100;
+	this.books_cost = 75;
+	this.books_timeout = 0;
+	this.font_size = 20;
 }
 
 function no_students_on_grid_at_end_of_level() {
@@ -155,16 +158,13 @@ function make_field() {
 
 	
 
-//<<<<<<< HEAD
-//=======
+
 	ctx.drawImage(field.bakerImage, -230, 44, 1600, 180);
 	ctx.drawImage(field.turretImage, 1200, 125, 417, 578);
 	for(var i = 0; i < 4; i++){
 		ctx.drawImage(field.dohertyImage, (400 * i) - 320, 670, 704, 231);
 	}
-	
-	//ctx.drawImage(field.turretImage, 1190, 180, 417, 578);
-//>>>>>>> 300e9a8638e6eabf4b54ee30cee8f9f7d97ea85b
+
 }
 
 
@@ -181,7 +181,6 @@ function spawn_handler() {
 			
 			field.time_until_student_spawn = field.max_time_until_student_spawn;
 			var mob = new student(random_row());
-			//var mob = new student(0);
 			field.student_list.push(mob);
 		}
 		if (player_turret.time_between_shots_fired  <= 0) {

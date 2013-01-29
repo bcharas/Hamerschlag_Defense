@@ -38,14 +38,7 @@ function update_all_turrets() {
 function update_all_health() {
 	for (var i = 0; i < field.health_list.length; i++) {
 		var this_health_bar = field.health_list[i];
-		/*if (this_health_bar.has_graduated === true) {
-			field.health_list.splice(i, 1);
-		}*/
 		var max_start_x = field.field_right - this_health_bar.width;
-		/*if (this_health_bar.start_x >= max_start_x) {
-			console.log("traceB");
-			field.health_list.splice(i, 1);
-		}*/
 		this_health_bar.update_health_bar(i);	
 	}	
 }
@@ -68,10 +61,5 @@ function update_handler() {
 	update_all_turrets();
 	player_turret.update_turret();
 	player_turret.target.update_target();
-	//update_all_images();
-	
-	//field.turretImage.src = "hamerschlag.png";
-	//ctx.drawImage(field.turretImage, 1190, 210);
-	
 	update_all_health();
 }

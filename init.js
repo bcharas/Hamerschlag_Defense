@@ -2,16 +2,22 @@ function spawn_timer() {
 	ctx.fillStyle = "#000000";
 	ctx.font = "20px Arial";
 	ctx.textAlign = "center";
-	//var spawn_time = Math.max(String(field.time_until_student_spawn/ 1000), 0);
-	//var spawn_msg = "Time to next spawn: ";
-	//ctx.fillText(spawn_msg.concat(spawn_time), canvas.width / 2, field.field_top / 2);
 	var students_remaining = "Students Remaining: " + (max_students_on_this_level - field.students_despawned);
 	ctx.fillText(students_remaining, canvas.width / 2, (field.field_top / 2) - 75);
 }
 
+function update_money() {
+	ctx.fillStyle = "#000000";
+	ctx.font = field.font_size + "px Arial";
+	ctx.textAlign = "right";
+	ctx.fillText("Money:", canvas.width - field.object_size, field.object_size);
+	ctx.fillText("$" + field.money + "K", canvas.width - field.object_size, field.object_size + 25);
+
+}
+
 function pause_handler() {
 	field.pause_button.update_button();
-	ctx.fillStyle = "#000000";
+	ctx.fillStyle = "#ffffff";
 	var pause_bar_width = (1 / 9) * field.pause_button.size;
 	var space_between_bars = pause_bar_width;
 	var pause_bar_height = (2 / 3) * field.pause_button.size;
@@ -48,14 +54,12 @@ function draw_play_button() {
 //Once the round has started, all functions are 
 //called from either here or an event listener.
 function step() {
-//<<<<<<< HEAD
 	if (field.ending_sequence === true) {
 		make_field();
 		update_handler();
 		spawn_timer();
 		pause_handler();
 		field.obstruction_spawner.update();
-		//console.log(field.projectile_list.length);
 		field.ending_sequence_length -= 1;
 		if (field.ending_sequence_length === 0) {
 			field.ending_sequence = false;
@@ -112,6 +116,7 @@ function step() {
 			  spawn_handler();
 			  update_handler();
 			  spawn_timer();
+			  update_money();
 			  player_turret.target.update_target();
 			  pause_handler();
 			  field.obstruction_spawner.update();
@@ -128,74 +133,6 @@ function step() {
 			}
 		  }
 		}
-
-/*=======
-	if (pausingForTransition === true) {
-    if (pauseTimer < 30) {
-      pauseTimer++;
-      ctx.fillStyle = "rgba(0, 0, 0, .5)";
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-      ctx.fillStyle = "#FFFFFF";
-      ctx.font = "50px Arial";
-      ctx.textAlign = "center";
-      ctx.fillText("Onto the next level", canvas.width / 2, canvas.height / 2);
-    }
-    else {
-      pausingForTransition = false;
-      pauseTimer = 0;
-      var max_students_on_next_level = max_students_on_this_level += 5;
-      clearInterval(timer);
-      next_level(max_students_on_next_level);
-    }
-  }
-  else { 
-    your_health.update_health_bar();
-    if (field.game_is_over === false) {
-      /* If this is true, all the students on a level 
-       * have been cleared. */ /*
-      if (no_students_on_grid_at_end_of_level() == true) {
-        num_levels_played++;
-        //If this is true, the player won the game!
-        if (num_levels_played >= max_num_levels) {
-          ctx.fillStyle = "rgba(0, 0, 0, .5)";
-          ctx.fillRect(0, 0, canvas.width, canvas.height);
-          ctx.fillStyle = "#FFFFFF";
-          ctx.font = "50px Arial";
-          ctx.textAlign = "center";
-          ctx.fillText("You've defeated the student " + 
-                      "body!", canvas.width / 2, canvas.height / 2); 
-        }
-        /* This block indicates that the game is moving to a harder 
-         * level.
-         */ /*
-        else {
-          pausingForTransition = true;
-        }  
-      }
-      else {
-        if (field.paused === false) {
-          make_field();
-          spawn_handler();
-          update_handler();
-          spawn_timer();
-          player_turret.update_turret();
-          player_turret.target.update_target();
-          pause_handler();
-          field.obstruction_spawner.update();
-          field.just_paused = false;
-        }
-        else {
-          if (field.just_paused === false) {
-            field.just_paused = true;
-            ctx.fillStyle = "#000000";
-            ctx.font = "15px Arial";
-            ctx.fillText("Paused!", (field.pause_button.x + (field.pause_button.size / 2)), (field.pause_button.y + (1.5 * field.pause_button.size)));
-            draw_play_button();
-          }
-        }
-      }
-    }
->>>>>>> 300e9a8638e6eabf4b54ee30cee8f9f7d97ea85b*/
   }
 }
 
@@ -219,7 +156,7 @@ function init() {
 	your_health = new player_health();
 	field.health_list.push(your_health);
 	field.pause_button = new pause_button();
-	field.obstruction_spawner = new obstruction_spawner(((canvas.width - field.field_right) / 2), .9 * canvas.height);
+	field.obstruction_spawner = new obstruction_spawner(canvas.width - field.object_size * 4, field.object_size - field.font_size);
 	timer = setInterval(step, timerDelay);
 }
 
@@ -240,7 +177,6 @@ function next_level(max_num_students) {
 
 function play_game(num_levels, num_students_first_level) {
   moveToNextLevel = false;
-  //pauseTimer = 0;
   pausingForTransition = false;
   num_levels_played = 0;
   max_num_levels = num_levels;
