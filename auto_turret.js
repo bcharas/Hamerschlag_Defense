@@ -58,14 +58,18 @@ function Auto_turret(x, y) {
 	
 	this.update_turret = function() {
 		//this.find_nearest_student();
-		ctx.fillStyle = "#551A8B"; //purple
-		ctx.fillRect(this.x, this.y, this.size, this.size);
-		ctx.strokeRect(this.x, this.y, this.size, this.size);
-	}
-	ctx.fillStyle = "#551A8B"; //purple
-	ctx.fillRect(this.x, this.y, this.size, this.size);
-	ctx.strokeRect(this.x, this.y, this.size, this.size);
-	//console.log("trace");
+		//ctx.fillStyle = "#551A8B"; //purple
+		//ctx.fillRect(this.x, this.y, this.size, this.size);
+		//ctx.strokeRect(this.x, this.y, this.size, this.size);
+  	ctx.drawImage(carnegieImage, this.x, this.y, 
+       Math.floor(this.size * 1.5), Math.floor(this.size * 1.5));
+  }
+	//ctx.fillStyle = "#551A8B"; //purple
+	//ctx.fillRect(this.x, this.y, this.size, this.size);
+	//ctx.strokeRect(this.x, this.y, this.size, this.size);
+	ctx.drawImage(carnegieImage, this.x, this.y, 
+        Math.floor(this.size * 4.5), Math.floor(this.size * 4.5));
+  //console.log("trace");
 }
 
 
@@ -118,10 +122,12 @@ function Auto_projectile(launch_x, launch_y, launch_angle) {
 		this.x += this.x_speed;
 		this.y += this.y_speed;
 		this.check_for_row_change();
-		ctx.fillStyle = "#551A8B"; //purple
-		ctx.fillRect(this.x, this.y, this.size, this.size);
-		ctx.strokeRect(this.x, this.y, this.size, this.size);
-		if (this.x <= 0) {
+		//ctx.fillStyle = "#551A8B"; //purple
+		//ctx.fillRect(this.x, this.y, this.size, this.size);
+		//ctx.strokeRect(this.x, this.y, this.size, this.size);
+		ctx.drawImage(paperBallImage, this.x, this.y, 
+        Math.floor(this.size * 4.5), Math.floor(this.size * 4.5));
+    if (this.x <= 0) {
 			  field.projectiles[this.name] = undefined;
 		}
 		
