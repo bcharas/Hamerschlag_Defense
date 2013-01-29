@@ -78,7 +78,7 @@ function Grid() {
 	for(var i = 0; i < 3; i++){
 		this.turret_spots.push(new Turret_placeholder(i * 376 + 264, 100));
 	}
-	this.turret_cost = 200;
+	this.turret_cost = 400;
 }
 
 function no_students_on_grid_at_end_of_level() {

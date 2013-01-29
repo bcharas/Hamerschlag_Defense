@@ -53,5 +53,9 @@ function update_handler() {
 	update_all_students();
 	update_all_turrets();
 	update_all_turret_spots();
+	// Doherty is drawn here to put it on top of projectiles
+	for(var i = 0; i < 4; i++){
+		ctx.drawImage(dohertyImage, (400 * i) - 320, 670, 704, 231);
+	}
 	update_all_health();
 }
