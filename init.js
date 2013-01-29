@@ -59,7 +59,8 @@ function step() {
     else {
       pausingForTransition = false;
       pauseTimer = 0;
-      var max_students_on_next_level = max_students_on_this_level += 5;
+      var max_students_on_next_level = 
+          Math.floor(max_students_on_this_level + 1.5 * num_levels_played);
       clearInterval(timer);
       next_level(max_students_on_next_level);
     }
@@ -104,9 +105,15 @@ function step() {
         else {
           if (field.just_paused === false) {
             field.just_paused = true;
-            ctx.fillStyle = "#000000";
-            ctx.font = "15px Arial";
-            ctx.fillText("Paused!", (field.pause_button.x + (field.pause_button.size / 2)), (field.pause_button.y + (1.5 * field.pause_button.size)));
+            //ctx.fillStyle = "#000000";
+            //ctx.font = "15px Arial";
+            //ctx.fillText("Paused!", (field.pause_button.x + (field.pause_button.size / 2)), (field.pause_button.y + (1.5 * field.pause_button.size)));           
+            ctx.fillStyle = "rgba(0, 0, 0, .5)";
+	          ctx.fillRect(0, 0, canvas.width, canvas.height);
+	          ctx.fillStyle = "#FFFFFF";
+	          ctx.font = "50px Arial";
+	          ctx.textAlign = "center";
+	          ctx.fillText("Paused!", canvas.width / 2, canvas.height / 2);
             draw_play_button();
           }
         }
@@ -154,13 +161,65 @@ function next_level(max_num_students) {
   init();
 }
 
+function load_images() {
+  skyImage = new Image();
+  skyImage.src = 'sky.jpg';
+  grassImage = new Image();
+  grassImage.src = 'grass.jpg';
+  bakerImage = new Image();
+  bakerImage.src = 'baker.png';
+  hamerschlagImage = new Image();
+  hamerschlagImage.src = "hamerschlag.png";
+  dohertyImage = new Image();
+  dohertyImage.src = 'doherty.png';
+  paperBallImage = new Image();
+  paperBallImage.src = "crumpled-paper.png";
+  carnegieImage = new Image();
+  carnegieImage.src = "Carnegie.png";
+}
+
+function main_menu() {
+  ctx.globalAlpha = 0.9;
+  ctx.drawImage(plaidImage, 0, 0, canvas.width, canvas.height);
+  ctx.globalAlpha = 1;
+  ctx.font = "70px Arial";
+  //ctx.textAlign = "center";
+  ctx.fillText("Hamerschlag Defense!", canvas.width / 4, canvas.height / 4, 
+              canvas.width / 2, canvas.height / 2);
+  for (var i = 0; i < 6; i++) {
+    var width = (i === 1) ? 110 : 125; 
+    ctx.drawImage(studentSprites, 24 + 110 * i, 120, width, 120, 
+      (i + 1) * canvas.width / 7, 
+      canvas.height / 2, canvas.height / 8, canvas.height / 8);
+  }
+  load_images();
+  start = new start_button();
+  start.update_button();
+  //start.funct = next_level(num_students_first_level);
+  ctx.font = "30px Arial";
+  //ctx.textAlign = "center";
+  ctx.fillText("Play!", canvas.width *  51 / 100, 15 * canvas.height / 16, 
+              canvas.width / 2, 7 * canvas.height / 8);
+}
+
+  //next_level(num_students_first_level);
+
 function play_game(num_levels, num_students_first_level) {
+  //load_images();
   moveToNextLevel = false;
   pauseTimer = 0;
   pausingForTransition = false;
   num_levels_played = 0;
+  num_students_on_first_level = num_students_first_level;
   max_num_levels = num_levels;
-  next_level(num_students_first_level);
+  displayingMainMenu = true;
+  studentSprites = new Image();
+  studentSprites.src = "spriteSheet.png";
+  plaidImage = new Image();
+  plaidImage.src = "plaid.jpg";
+  plaidImage.onload = function() {
+    main_menu();
+  }
 }
 
-play_game(2, 3);
+play_game(4, 16);
