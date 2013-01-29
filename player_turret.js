@@ -4,23 +4,32 @@ canvas.addEventListener('mousedown', onMouseDown, false);
 //called whenever a mouse push is detected, and calls a function to create
 // a new projectile target for the player at the location of the click
 function onMouseDown(event) {
-    var x = event.pageX - canvas.offsetLeft;
-    var y = event.pageY - canvas.offsetTop;
-	field.button_check(x, y);
-	if ((field.game_is_over === false) && (field.paused === false)) {
-		if (field.obstruction_spawner.placing_mode === true) {
-			place_obstruction(x, y);
-			field.obstruction_spawner.placing_mode = false;
-		}
-		else if ((x >= field.obstruction_spawner.x) && (x <= (field.obstruction_spawner.x + field.obstruction_spawner.size))) {
-			if ((y >= field.obstruction_spawner.y) && (y <= (field.obstruction_spawner.y + field.obstruction_spawner.size))) {
-				field.obstruction_spawner.placing_mode = true;
-			}
-		}
-		else {
-			player_turret.target = new Target(x, y);		
-		}
-	}	
+  var x = event.pageX - canvas.offsetLeft;
+  var y = event.pageY - canvas.offsetTop;
+  if (displayingMainMenu === true) {
+    if ((x >= canvas.width / 2) && (x <= ((canvas.width / 2) + 100)) &&
+     (y >= 7 * canvas.height / 8) && (y <= (7 * canvas.height / 8) + 100)) {
+      displayingMainMenu = false;
+      next_level(num_students_on_first_level);
+    } 
+  }
+  else { 
+    field.button_check(x, y);
+    if ((field.game_is_over === false) && (field.paused === false)) {
+      if (field.obstruction_spawner.placing_mode === true) {
+        place_obstruction(x, y);
+        field.obstruction_spawner.placing_mode = false;
+      }
+      else if ((x >= field.obstruction_spawner.x) && (x <= (field.obstruction_spawner.x + field.obstruction_spawner.size))) {
+        if ((y >= field.obstruction_spawner.y) && (y <= (field.obstruction_spawner.y + field.obstruction_spawner.size))) {
+          field.obstruction_spawner.placing_mode = true;
+        }
+      }
+      else {
+        player_turret.target = new Target(x, y);		
+      }
+    }
+  }	
 }
 
 
@@ -121,10 +130,14 @@ function Projectile(launch_x, launch_y, target_x, target_y) {
 			}				
 		}
 		this.check_for_row_change();
-		ctx.fillStyle = "#551A8B"; //purple
-		ctx.fillRect(this.x, this.y, this.size, this.size);
-		ctx.strokeRect(this.x, this.y, this.size, this.size);
-    
+		//ctx.fillStyle = "#551A8B"; //purple
+		//ctx.fillRect(this.x, this.y, this.size, this.size);
+		//ctx.strokeRect(this.x, this.y, this.size, this.size);
+    //var projectileImage = new Image();
+    //projectileImage.src = "crumpled-paper.png";
+    ctx.drawImage(paperBallImage, this.x, this.y, 
+        Math.floor(this.size * 4.5), Math.floor(this.size * 4.5));
+
     //This removes projectiles that have gone off the screen
 		if (this.x <= 0) {
 			  field.projectiles[this.name] = undefined;
