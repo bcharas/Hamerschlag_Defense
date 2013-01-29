@@ -200,13 +200,11 @@ function load_images() {
 function main_menu() {
   ctx.drawImage(hamerschlagMenuImage, 0, 0, canvas.width, canvas.height);
   ctx.font = "70px Arial";
-  ctx.fillText("Hamerschlag Defense!", canvas.width / 4, canvas.height / 4, 
+  ctx.textAlign = 'center';
+  ctx.fillText("Hamerschlag Defense", canvas.width / 2, canvas.height / 6, 
               canvas.width / 2, canvas.height / 2);
   for (var i = 0; i < 6; i++) {
-    var width = (i === 1) ? 110 : 125; 
-    ctx.drawImage(studentSprites, 24 + 110 * i, 120, width, 120, 
-      (i + 1) * canvas.width / 7, 
-      3 * canvas.height / 4, canvas.height / 8, canvas.height / 8);
+	ctx.drawImage(studentSprites, i * 120, 120, 120, 120, i * canvas.width / 8 + 200, canvas.height * 0.72, 120, 120);
   }
   load_images();
   /////////
@@ -241,9 +239,7 @@ function main_menu() {
 			else {
 				ctx.fillStyle = button.inverted_color;
 			}
-			ctx.fillRect(button.x, button.y, button.size, button.size);
-			ctx.fillStyle = "#000000";
-			ctx.strokeRect(button.x, button.y, button.size, button.size);
+			ctx.fillRect(button.x - button.size * 0.75, button.y, button.size * 1.5, button.size);
 		}
 	}
 ///////// THESE PROBABLY SHOULDN'T HAVE TO BE HERE.	
@@ -254,7 +250,7 @@ function main_menu() {
   start.update_button();
   ctx.font = "30px Arial";
 	ctx.fillStyle = "#FFFFFF";
-  ctx.fillText("Play!", canvas.width *  51 / 100, 15 * canvas.height / 16, 
+  ctx.fillText("Play!", canvas.width / 2, 15 * canvas.height / 16, 
               canvas.width / 2, 7 * canvas.height / 8);
 }
 
