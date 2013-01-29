@@ -23,8 +23,8 @@ function student(row) {
 		/*ctx.fillStyle = "#FF0000";
 		ctx.fillRect(this.x, this.y, this.size, field.row_height);
 		ctx.strokeRect(this.x, this.y, this.size, field.row_height);*/
-		var studentSprites = new Image();
-		studentSprites.src = "spriteSheet.png";
+		//var studentSprites = new Image();
+		//studentSprites.src = "spriteSheet.png";
 		ctx.drawImage(studentSprites, this.student_type * 120, ((this.stand_or_walk % 4) * 120), 120, 120, this.x, this.y, field.row_height, field.row_height);
 		this.stand_or_walk++;
 	}
