@@ -191,33 +191,28 @@ function load_images() {
 }
 
 function main_menu() {
-  ctx.globalAlpha = 0.9;
-  ctx.drawImage(plaidImage, 0, 0, canvas.width, canvas.height);
-  ctx.globalAlpha = 1;
+  ctx.drawImage(hamerschlagMenuImage, 0, 0, canvas.width, canvas.height);
+  //ctx.globalAlpha = 0.7;
   ctx.font = "70px Arial";
-  //ctx.textAlign = "center";
   ctx.fillText("Hamerschlag Defense!", canvas.width / 4, canvas.height / 4, 
               canvas.width / 2, canvas.height / 2);
+  //ctx.globalAlpha = 1;
   for (var i = 0; i < 6; i++) {
     var width = (i === 1) ? 110 : 125; 
     ctx.drawImage(studentSprites, 24 + 110 * i, 120, width, 120, 
       (i + 1) * canvas.width / 7, 
-      canvas.height / 2, canvas.height / 8, canvas.height / 8);
+      3 * canvas.height / 4, canvas.height / 8, canvas.height / 8);
   }
   load_images();
   start = new start_button();
   start.update_button();
-  //start.funct = next_level(num_students_first_level);
   ctx.font = "30px Arial";
-  //ctx.textAlign = "center";
+	ctx.fillStyle = "#FFFFFF";
   ctx.fillText("Play!", canvas.width *  51 / 100, 15 * canvas.height / 16, 
               canvas.width / 2, 7 * canvas.height / 8);
 }
 
-  //next_level(num_students_first_level);
-
 function play_game(num_levels, num_students_first_level) {
-  //load_images();
   moveToNextLevel = false;
   pauseTimer = 0;
   pausingForTransition = false;
@@ -227,9 +222,12 @@ function play_game(num_levels, num_students_first_level) {
   displayingMainMenu = true;
   studentSprites = new Image();
   studentSprites.src = "spriteSheet.png";
-  plaidImage = new Image();
-  plaidImage.src = "plaid.jpg";
-  plaidImage.onload = function() {
+  //plaidImage = new Image();
+  //plaidImage.src = "plaid.jpg";
+  hamerschlagMenuImage = new Image();
+  hamerschlagMenuImage.src = "Hamerschlag_front.jpg";
+  //plaidImage.onload = function() {
+  hamerschlagMenuImage.onload = function() {
     main_menu();
   }
 }
