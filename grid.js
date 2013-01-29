@@ -115,9 +115,6 @@ function make_field() {
 	ctx.drawImage(hamerschlagImage, 1190, 180, 417, 578);
 	//var dohertyImage = new Image();
 	//dohertyImage.src = 'doherty.png';
-	for(var i = 0; i < 4; i++){
-		ctx.drawImage(dohertyImage, (400 * i) - 320, 670, 704, 231);
-	}
 }
 
 
