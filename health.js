@@ -62,9 +62,10 @@ function obstruction_health(obstruction) {
 function health_bar(bar) {
 	ctx.fillStyle = "#000000"; //black
 	ctx.fillRect(bar.start_x, bar.start_y, bar.width, bar.height);
-	var offset = 5;
 	ctx.fillStyle = "#8C8C8C"; //gray
-	ctx.fillRect(bar.start_x + offset, bar.start_y + offset, bar.width - (2 * offset), bar.height - (2 * offset));
+	var offset_x = .005 * bar.width;
+	var offset_y = .1 * bar.height;
+	ctx.fillRect(bar.start_x + offset_x, bar.start_y + offset_y, bar.width - (2 * offset_x), bar.height - (2 * offset_y));
 	if (bar.current_health >= .66) {
 		ctx.fillStyle = "#66FF00"; //green
 	}
@@ -74,5 +75,5 @@ function health_bar(bar) {
 	else {
 		ctx.fillStyle = "#FF0000"; //red
 	}
-	ctx.fillRect(bar.start_x + offset, bar.start_y + offset, bar.current_health * (bar.width - (2 * offset)), bar.height - (2 * offset));
+	ctx.fillRect(bar.start_x + offset_x, bar.start_y + offset_y, bar.current_health * (bar.width - (2 * offset_x)), bar.height - (2 * offset_y));
 }

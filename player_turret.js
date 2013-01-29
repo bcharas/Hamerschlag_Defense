@@ -14,16 +14,24 @@ function onMouseDown(event) {
 			}
 			field.obstruction_spawner.placing_mode = false;
 		}
-		else if ((x >= field.obstruction_spawner.x) && (x <= (field.obstruction_spawner.x + field.obstruction_spawner.size))) {
-			if ((y >= field.obstruction_spawner.y) && (y <= (field.obstruction_spawner.y + field.obstruction_spawner.size))) {
-				if(field.money - field.books_cost >= 0){
-					field.obstruction_spawner.placing_mode = true;
-				} else {
-					field.books_timeout = 20;
-				}
+		else if (
+			x >= field.obstruction_spawner.x &&
+			x <= (field.obstruction_spawner.x + field.obstruction_spawner.size) &&
+			y >= field.obstruction_spawner.y &&
+			y <= (field.obstruction_spawner.y + field.obstruction_spawner.size)
+		) {
+			if(field.money - field.books_cost >= 0){
+				field.obstruction_spawner.placing_mode = true;
+			} else {
+				field.books_timeout = 20;
 			}
 		}
-		else {
+		else if (
+			x < field.pause_button.x ||
+			x > (field.pause_button.x + field.pause_button.size) ||
+			y < field.pause_button.y ||
+			y > (field.pause_button.y + field.pause_button.size)
+		) {
 			player_turret.target = new Target(x, y);		
 		}
 	}	

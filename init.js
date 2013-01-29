@@ -17,7 +17,7 @@ function update_money() {
 
 function pause_handler() {
 	field.pause_button.update_button();
-	ctx.fillStyle = "#000000";
+	ctx.fillStyle = "#ffffff";
 	var pause_bar_width = (1 / 9) * field.pause_button.size;
 	var space_between_bars = pause_bar_width;
 	var pause_bar_height = (2 / 3) * field.pause_button.size;
