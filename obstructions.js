@@ -38,12 +38,10 @@ function Obstruction(x, row) {
 	this.size = field.object_size;
 	this.health = 1;
 	this.health_bar = new obstruction_health(this);
-	this.color = "#76766E";
 	this.update_obstruction = function() {
-		ctx.fillStyle = this.color;
-		ctx.fillRect(this.x, this.y, this.size, field.row_height);
-		ctx.fillStyle = "#000000";
-		ctx.strokeRect(this.x, this.y, this.size, field.row_height);
+		var booksImage = new Image();
+		booksImage.src = 'books.png';
+		ctx.drawImage(booksImage, this.x, this.y, this.size, field.row_height);
 	}
 }
 
