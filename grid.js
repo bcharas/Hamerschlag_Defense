@@ -70,7 +70,10 @@ function Grid() {
 	this.obstruction_count = 0;
 	this.mid_x = this.field_width / 2;
 	this.mid_y = (this.field_bottom - this.field_top) / 2;
-
+	this.money = 100;
+	this.books_cost = 75;
+	this.books_timeout = 0;
+	this.font_size = 20;
 }
 
 function no_students_on_grid_at_end_of_level() {

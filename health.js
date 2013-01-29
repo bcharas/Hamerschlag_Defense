@@ -4,9 +4,9 @@ function player_health() {
 	this.max_health = 1;
 	this.current_health = 1; //percent health remaining (max is 1, min, before game over, is 0)
 	this.width = .75 * canvas.width;
-	this.height = .33 * (canvas.height - field.field_bottom)
+	this.height = field.object_size;
 	this.start_x = .125 * canvas.width;
-	this.start_y = field.field_bottom + .33 * (canvas.height - field.field_bottom);
+	this.start_y = canvas.height - field.object_size * 2;
 	this.name = "0";
 	field.healths_recorded++;
 	health_bar(this);
@@ -63,19 +63,17 @@ function health_bar(bar) {
 	ctx.fillStyle = "#000000"; //black
 	ctx.fillRect(bar.start_x, bar.start_y, bar.width, bar.height);
 	ctx.fillStyle = "#8C8C8C"; //gray
-	var offset_x = .01 * bar.width;
-	var offset_y = .2 * bar.height;
+	var offset_x = .005 * bar.width;
+	var offset_y = .1 * bar.height;
 	ctx.fillRect(bar.start_x + offset_x, bar.start_y + offset_y, bar.width - (2 * offset_x), bar.height - (2 * offset_y));
 	if (bar.current_health >= .66) {
 		ctx.fillStyle = "#66FF00"; //green
-		ctx.fillRect(bar.start_x + offset_x, bar.start_y + offset_y, bar.current_health * (bar.width - (2 * offset_x)), bar.height - (2 * offset_y));
 	}
 	else if (bar.current_health >= .33) {
 		ctx.fillStyle = "#FFFF00"; //yellow
-		ctx.fillRect(bar.start_x + offset_x, bar.start_y + offset_y, bar.current_health * (bar.width - (2 * offset_x)), bar.height - (2 * offset_y));
 	}
 	else {
 		ctx.fillStyle = "#FF0000"; //red
-		ctx.fillRect(bar.start_x + offset_x, bar.start_y + offset_y, bar.current_health * (bar.width - (2 * offset_x)), bar.height - (2 * offset_y));
 	}
+	ctx.fillRect(bar.start_x + offset_x, bar.start_y + offset_y, bar.current_health * (bar.width - (2 * offset_x)), bar.height - (2 * offset_y));
 }

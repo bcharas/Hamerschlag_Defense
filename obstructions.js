@@ -18,7 +18,7 @@ function place_obstruction(x, y) {
 		}
 		return false;
 	}
-	is_valid(x,y);
+	return is_valid(x,y);
 }
 
 
@@ -38,12 +38,10 @@ function Obstruction(x, row) {
 	this.size = field.object_size;
 	this.health = 1;
 	this.health_bar = new obstruction_health(this);
-	this.color = "#76766E";
 	this.update_obstruction = function() {
-		ctx.fillStyle = this.color;
-		ctx.fillRect(this.x, this.y, this.size, field.row_height);
-		ctx.fillStyle = "#000000";
-		ctx.strokeRect(this.x, this.y, this.size, field.row_height);
+		var booksImage = new Image();
+		booksImage.src = 'books.png';
+		ctx.drawImage(booksImage, this.x, this.y, this.size, field.row_height);
 	}
 }
 
@@ -65,18 +63,24 @@ function obstruction_spawner(x, y){
 	this.size = field.object_size;
 	this.placing_mode = false;
 	this.update = function() {
-		if (this.placing_mode === false) {
+		if(field.books_timeout > 0){
+			ctx.fillStyle = '#ff0000';
+			ctx.textAlign = 'center';
+			var books_text = "Not enough money";
+			field.books_timeout--;
+		}
+		else if (this.placing_mode === false) {
 			ctx.fillStyle = "#000000";
 			ctx.textAlign = "center";
-			ctx.fillText("Click to pick up an obstruction.", 150, canvas.height - 15);
+			var books_text = "Buy books";
 		}
 		else {
 			ctx.fillStyle = "#ffffff";
 			ctx.textAlign = "center";
-			ctx.fillText("Now click on the board to place it.", 150, canvas.height - 15);
+			var books_text = "Click to place books";
 		}
-		ctx.fillRect(this.x, this.y, this.size, this.size);	
-		ctx.fillStyle = "#000000";
-		ctx.strokeRect(this.x, this.y, this.size, this.size);	
+		ctx.fillText(books_text, canvas.width - field.object_size * 3.5, field.object_size + this.size);
+		ctx.fillRect(this.x, this.y, this.size, this.size);
+		ctx.strokeRect(this.x, this.y, this.size, this.size);
 	}
 }
