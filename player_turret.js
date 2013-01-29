@@ -4,37 +4,52 @@ canvas.addEventListener('mousedown', onMouseDown, false);
 //called whenever a mouse push is detected, and calls a function to create
 // a new projectile target for the player at the location of the click
 function onMouseDown(event) {
-    var x = event.pageX - canvas.offsetLeft;
-    var y = event.pageY - canvas.offsetTop;
-	field.button_check(x, y);
-	if ((field.game_is_over === false) && (field.paused === false)) {
-		if (field.obstruction_spawner.placing_mode === true) {
-			if(place_obstruction(x, y)){
-				field.money -= field.books_cost;
+  var x = event.pageX - canvas.offsetLeft;
+  var y = event.pageY - canvas.offsetTop;
+  //console.log(String(x) + " " + String(y));
+  if (displayingMainMenu === true) {
+    if ((x >= canvas.width / 2) && (x <= ((canvas.width / 2) + 100)) &&
+     (y >= 7 * canvas.height / 8) && (y <= (7 * canvas.height / 8) + 100)) {
+      displayingMainMenu = false;
+      next_level(num_students_on_first_level);
+    } 
+  }
+  else { 
+    field.button_check(x, y);
+    if ((field.game_is_over === false) && (field.paused === false)) {
+      if (field.obstruction_spawner.placing_mode === true) {
+        if(place_obstruction(x, y)){
+          field.money -= field.books_cost;
+        }
+        field.obstruction_spawner.placing_mode = false;
+      }
+      else if (
+        x >= field.obstruction_spawner.x &&
+        x <= (field.obstruction_spawner.x + field.obstruction_spawner.size) &&
+        y >= field.obstruction_spawner.y &&
+        y <= (field.obstruction_spawner.y + field.obstruction_spawner.size)
+      ) {
+        if(field.money - field.books_cost >= 0){
+          field.obstruction_spawner.placing_mode = true;
+        } else {
+          field.books_timeout = 20;
+        }
+      }
+      else if (
+        x < field.pause_button.x ||
+        x > (field.pause_button.x + field.pause_button.size) ||
+        y < field.pause_button.y ||
+        y > (field.pause_button.y + field.pause_button.size)
+      ) {
+			if ((x < field.field_right) && (x > field.field_left) && (y > field.field_top) && (y < field.field_bottom)) {
+				player_turret.target = new Target(x, y);		
 			}
-			field.obstruction_spawner.placing_mode = false;
-		}
-		else if (
-			x >= field.obstruction_spawner.x &&
-			x <= (field.obstruction_spawner.x + field.obstruction_spawner.size) &&
-			y >= field.obstruction_spawner.y &&
-			y <= (field.obstruction_spawner.y + field.obstruction_spawner.size)
-		) {
-			if(field.money - field.books_cost >= 0){
-				field.obstruction_spawner.placing_mode = true;
-			} else {
-				field.books_timeout = 20;
+			else {
+				ctx.drawImage(noSymbol, x - 25, y - 25, 50, 50);
 			}
-		}
-		else if (
-			x < field.pause_button.x ||
-			x > (field.pause_button.x + field.pause_button.size) ||
-			y < field.pause_button.y ||
-			y > (field.pause_button.y + field.pause_button.size)
-		) {
-			player_turret.target = new Target(x, y);		
-		}
-	}	
+      }
+    }	
+  }	
 }
 
 
@@ -55,9 +70,8 @@ function Turret(x, y) {
 	//handles the drawing of turrets. Supports moving turrets, 
 	//though there currently are none.
 	this.update_turret = function() {
-		ctx.fillStyle = "#551A8B"; //purple
-		ctx.fillRect(this.x, this.y, this.size, this.size);
-		ctx.strokeRect(this.x, this.y, this.size, this.size);
+		this.target.update_target();
+
 	}
 	
 }
@@ -121,11 +135,8 @@ function Projectile(launch_x, launch_y, target_x, target_y) {
 					row_bottom += next_row_height;
 				}
 			}
-		ctx.fillStyle = "#551A8B"; //purple
-		ctx.fillRect(this.x, this.y, this.size, this.size);
-		ctx.strokeRect(this.x, this.y, this.size, this.size);
-    
-    //This removes projectiles that have gone off the screen
+    ctx.drawImage(paperBallImage, this.x, this.y, 
+        Math.floor(this.size * 4.5), Math.floor(this.size * 4.5));
 		if (this.x <= 0) {
 			  field.projectile_list.splice(index, 1);
 		}
@@ -151,14 +162,12 @@ function collision_check(student_index) {
 //object that establishes paramaters and functions
 //for a target object (each projectile is assigned a target that it is fired towards)
 function Target(x, y) {
-	this.size = 5;
+	this.size = 35;
 	this.x = x;
 	this.y = y;
-	ctx.fillStyle = "#000000";
-	ctx.fillRect(x, y, this.size, this.size);
 	this.update_target = function() {
-		ctx.fillStyle = "#000000";
-		ctx.fillRect(this.x, this.y, this.size, this.size);
+		ctx.drawImage(targetImage, this.x - (this.size / 2), this.y - (this.size / 2), this.size, this.size);
+
 	}
 }
 
@@ -168,6 +177,7 @@ function Target(x, y) {
 //colliding student is also despawned.
 function collide(projectile_index, student_index) {
 	var student = field.student_list[student_index];
+	console.log(field.student_list[student]);
 	var projectile = field.projectile_list[projectile_index];
 
 	field.projectile_list.splice(projectile_index, 1);

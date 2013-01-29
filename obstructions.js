@@ -1,19 +1,19 @@
 function place_obstruction(x, y) {
 	var is_valid = function(x, y) {
 		if ((x > field.field_right - 50) || (x <= 0)) {
-			console.log("what are you doing...");
+			//console.log("what are you doing...");
 			return false;
 		}
 		var row_top = field.field_top;
 		var row_bottom = row_top + field.row_heights[field.row_heights.length - 1];
 		if ((y >= field.field_top) && (y < field.field_bottom)) {
-			console.log("check1");
+			//console.log("check1");
 			for (var i = 1; i < field.num_rows; i++) {
-				console.log("y: " + y);
-				console.log("row_top: " + row_top);
-				console.log("row_bottom: " + row_bottom);
+				//console.log("y: " + y);
+				//console.log("row_top: " + row_top);
+				//console.log("row_bottom: " + row_bottom);
 				if ((y >= row_top) && (y < row_bottom)) { //I suppose, in rare case of tie, bias to upper row
-						console.log("check3");
+						//console.log("check3");
 						var obstruction = new Obstruction(x, (i - 1));						
 						field.obstruction_list.push(obstruction);
 						field.health_list.push(obstruction.health_bar);
@@ -23,20 +23,21 @@ function place_obstruction(x, y) {
 					var next_row_height = field.row_heights[field.row_heights.length - 1 - i];
 					row_top = row_bottom;
 					row_bottom += next_row_height;
+					console.log("y: " + y)
 				}
 			}
 		}
-		console.log("y: " + y);
-		console.log("row_top: " + row_top);
-		console.log("row_bottom: " + row_bottom);
+		//console.log("y: " + y);
+		//console.log("row_top: " + row_top);
+		//console.log("row_bottom: " + row_bottom);
 		if ((y >= row_top) && (y < row_bottom)) {
-			console.log("check2");
+			//console.log("check2");
 			var obstruction = new Obstruction(x, (4));						
 			field.obstruction_list.push(obstruction);
 			field.health_list.push(obstruction.health_bar);
 			return true;
 		}
-		console.log("bleh");
+		//console.log("bleh");
 		return false;
 	}
 	return is_valid(x,y);
@@ -56,12 +57,11 @@ function Obstruction(x, row) {
 	this.health = 1;
 	this.health_bar = new obstruction_health(this);
 	this.update_obstruction = function() {
-		ctx.drawImage(field.booksImage, this.x, this.y, this.size, field.row_height);
+		ctx.drawImage(field.booksImage, this.x, this.y, this.size / 2, this.size);
 	}
 }
 
 function destroy_obstruction(obstruction_index) {
-	var obstruction = field.obstruction_list[obstruction_index];
 	field.obstruction_list.splice(obstruction_index, 1);
 }
 

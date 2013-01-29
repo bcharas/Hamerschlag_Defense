@@ -5,8 +5,7 @@ function Auto_turret(x, y) {
 	this.turret_type = "auto turret";
 	this.size = field.object_size;
 	this.x_center = this.x + (this.size / 2);
-	this.y_center = this.y + (this.size / 2);
-	this.target = new Target(0, canvas.height/2);
+	this.y_center = this.y + (this.size / 2) + 50;
 	this.nearest_student = undefined;
 	this.nearest_student_distance = undefined;
 	this.nearest_student_x_distance = undefined;
@@ -53,13 +52,8 @@ function Auto_turret(x, y) {
 	}
 	
 	this.update_turret = function() {
-		ctx.fillStyle = "#551A8B"; //purple
-		ctx.fillRect(this.x, this.y, this.size, this.size);
-		ctx.strokeRect(this.x, this.y, this.size, this.size);
+		ctx.drawImage(carnegie_mouth_top, this.x, this.y + 15, Math.floor(this.size * 2), Math.floor(this.size * 1.25));
 	}
-	ctx.fillStyle = "#551A8B"; //purple
-	ctx.fillRect(this.x, this.y, this.size, this.size);
-	ctx.strokeRect(this.x, this.y, this.size, this.size);
 }
 
 
@@ -75,34 +69,8 @@ function Auto_projectile(launch_x, launch_y, launch_angle) {
 	this.x = launch_x;
 	this.y = launch_y;
 	this.in_middle = false;
+	this.row = field.get_row_from_y(this.y);
 	
-	this.row = Math.floor((this.y - field.field_top) / field.row_height);
-	
-	
-	//this.quadrant = get_quadrant(this.x, this.y, this.row);
-	//increment_quadrants(this.row, this.quadrant);
-	
-	
-	//This code checks if a projectile has changed rows. If so, it adjusts 
-    //the values of projectiles in each row accordingly 
-    /*
-	this.check_for_row_change = function() {
-		var new_row = Math.floor((this.y - field.field_top) / field.row_height);
-		if (new_row !== this.row || this.x <= 0) {
-		  //field.num_projectiles_per_row[this.row]--;
-		 // decrement_quadrants(this.row, this.quadrant);
-		  
-		  if (new_row !== -1 && new_row !== this.row && this.x >= 0)
-			//field.num_projectiles_per_row[new_row]++;
-			//this.quadrant = get_quadrant(this.x, this.y, this.row);
-			//console.log("traceD");
-			//increment_quadrants(new_row, this.quadrant);
-		}
-		this.row = new_row;
-	}*/
-	
-	
-
 	//This function first calls collision_check to see if a collision has
 	//occurred.If it has not, it moves the projectile according to it's speed
 	//and then draws it at it's new position. See collision_check() for the
@@ -110,16 +78,15 @@ function Auto_projectile(launch_x, launch_y, launch_angle) {
 	this.update_projectile = function(index) {		
 		this.x += this.x_speed;
 		this.y += this.y_speed;
-		this.row = Math.floor((this.y - field.field_top) / field.row_height);
-		ctx.fillStyle = "#551A8B"; //purple
-		ctx.fillRect(this.x, this.y, this.size, this.size);
-		ctx.strokeRect(this.x, this.y, this.size, this.size);
+		this.row = field.get_row_from_y(this.y);
 		if (this.x <= 0) {
-			  field.projectile_list.splice(index, 1);
+			//console.log("test");
+			field.projectile_list.splice(index, 1);
 		}
-		
-	
+		ctx.drawImage(paperBallImage, this.x, this.y, 
+        Math.floor(this.size * 4.5), Math.floor(this.size * 4.5));
 	}
+	
 	
 	//this function, called whenever a projectile moves, checks if the
 	//projectile should collide (i.e. they share the same space) with a

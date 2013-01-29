@@ -12,7 +12,6 @@ function Button(button, funct, default_position) {
 		}
 	}
 	button.update_button = function() {
-		if (field.game_is_over === false) {
 			if (button.position === button.default_position) {
 				ctx.fillStyle = button.color;
 			}
@@ -24,7 +23,7 @@ function Button(button, funct, default_position) {
 			ctx.strokeRect(button.x, button.y, button.size, button.size);
 		}
 	}
-}
+
 
 function pause_button() {
 	this.size = field.object_size;
@@ -39,4 +38,14 @@ function pause_button() {
 		}
 	}
 	Button(this, this.pause, false);
+}
+
+function start_button() {
+  this.size = 100;
+  this.x = canvas.width / 2;
+  this.y = 7 * canvas.height / 8;
+  this.funct = function () { 
+    next_level(num_students_on_first_level);
+  }
+  Button(this, this.funct, false);
 }

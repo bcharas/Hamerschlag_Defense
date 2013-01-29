@@ -19,7 +19,7 @@ function student(row) {
 	this.just_knocked_back = false;
 	this.student_type = Math.floor(Math.random() * 6);
 	this.stand_or_walk = 0;
-	this.dodge_cooldown = 5;
+	this.dodge_cooldown = 3;
 	
 	this.random_student_type = function() {
 		var type_num = Math.floor(Math.random() * 4.99);
@@ -32,6 +32,7 @@ function student(row) {
 	this.draw_student = function () {
 		ctx.drawImage(field.studentSprites, this.sprite_x, ((this.stand_or_walk % 4) * 120), 100, 120, this.x, this.y - (.15 * this.height), this.size, this.size);
 		this.stand_or_walk++;
+		ctx.strokeRect(this.x, this.y - (.15 * this.height), 250, this.size);
 	}
   
   //This function takes the number of projectiles in three consecutive 
@@ -39,13 +40,17 @@ function student(row) {
 
 	//updates a student's location on the field
 	this.update = function () {
-		if ((this.x >= field.field_left + 50) && (this.x <= field.field_right - 100)) {
-			if (this.dodge_cooldown === 0) {
+		if ((this.x >= field.field_left) && (this.x <= field.field_right - 100)) {
+			//console.log(this.dodge_cooldown);
+			if (this.dodge_cooldown <= 0) {
 				new_row = change_row_using_line_of_sight(this, this.row);
 				if (new_row !== this.row) {
 					if (can_change_rows(new_row, this)) {
+						console.log("dodge!");
 						this.dodge_cooldown = 5;
 						this.row = new_row;
+						this.size = field.student_height_for_a_row(this.row);
+						this.draw_student();
 					}
 				}			
 				this.y = field.field_top;
@@ -53,25 +58,33 @@ function student(row) {
 					this.y += field.row_heights[field.row_heights.length - 1 - i];
 				}
 				this.y_center = this.y + (this.size / 2);
+
 			}
 			else {
 				this.dodge_cooldown -= 1;
+				console.log(this.dodge_cooldown);
+				//this.x += this.speed;
 			}
 		}
-		if ((this.x + this.size) < field.field_right) {
-			var should_move = true;
-			student_obstruction_collision_check(this);
-			if (should_move === true)
-				this.x += this.speed;
-				this.x_center = this.x + (this.size / 2);
-				this.draw_student();
-		}
-		else {
-			graduate_student(this)		
+		if (this.dodge_cooldown !== 5) {
+			//console.log("24601");
+			this.dodge_cooldown -= 1;
+			if ((this.x + this.size) < field.field_right) {
+				var should_move = true;
+				//this.x += this.speed;
+				student_obstruction_collision_check(this);
+				if (should_move === true) {
+					this.x += this.speed;
+					this.x_center = this.x + (this.size / 2);
+					this.draw_student();
+				}
+			}
+			else {
+				graduate_student(this)		
+			}
 		}
 	}
 }
-
 //prevents student from laterally moving onto obstructions... maybe also on to other students?
 function can_change_rows(new_row, student) {
 	if (new_row < student.row) {
@@ -80,15 +93,13 @@ function can_change_rows(new_row, student) {
 	else {
 		student.size /= field.ratio_of_row_to_next_row_behind;
 	}
-	var student_next_x_position_left = student.x + student.speed;
-	var student_next_x_position_right = student.x + student.speed + student.size;
 	for (var i = 0; i < field.obstruction_list.length; i++) {
 		var obstruction = field.obstruction_list[i];
 		if (obstruction.row === new_row) {
-			if ((student_next_x_position_left >= obstruction.x) && (student_next_x_position_left <= (obstruction.x + (obstruction.size / 2)))) {
+			if ((student.x >= obstruction.x) && (student.x <= (obstruction.x + (obstruction.size / 2)))) {
 				return false;
 			}
-			if ((student_next_x_position_right >= obstruction.x) && (student_next_x_position_right <= (obstruction.x + (obstruction.size / 2)))) {
+			if (((student.x + student.size) >= obstruction.x) && ((student.x + student.size) <= (obstruction.x + (obstruction.size / 2)))) {
 				return false;
 			}		
 		}	
@@ -162,3 +173,4 @@ function graduate_health_bar(health_bar) {
 	field.health_list.splice(health_bar_index, 1);
 
 }
+

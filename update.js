@@ -8,7 +8,6 @@ function update_all_students() {
 		}
 		else {
 			collision_check(i);
-			//move();
 			this_student.update();	
 		}
 	}
@@ -55,11 +54,11 @@ function update_all_images() {
 
 
 function update_handler() {
-	update_all_obstructions();
-	update_all_projectiles();
+	//update_all_projectiles();
+	//player_turret.update_turret();
+	//player_turret.target.update_target();
+	//update_all_turrets();
+	update_all_obstructions();	
 	update_all_students();
-	update_all_turrets();
-	player_turret.update_turret();
-	player_turret.target.update_target();
 	update_all_health();
 }
