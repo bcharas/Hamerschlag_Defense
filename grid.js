@@ -159,8 +159,9 @@ function Grid() {
 //=======
 	this.turret_spots = [];
 	for(var i = 0; i < 3; i++){
-		this.turret_spots.push(new Turret_placeholder(i * 376 + 264, 100));
+		this.turret_spots.push(new Turret_placeholder(i * 400 + 210, 100));
 	}
+	this.turret_spots.splice(1, 1);
 	this.turret_cost = 400;
 //>>>>>>> d7d923849a10a0905be46e4de77bfe544889b432
 }
@@ -201,6 +202,8 @@ function make_field() {
 	ctx.drawImage(bakerImage, -230, 44, 1600, 180);
 	//field.turretImage.src = "hamerschlag.png";
 	//ctx.drawImage(field.turretImage, 1190, 180, 417, 578);
+	player_turret.update_turret();
+	update_all_projectiles();
 	ctx.drawImage(hamerschlagImage, 1190, 180, 417, 578);
 	//var dohertyImage = new Image();
 	//dohertyImage.src = 'doherty.png';
@@ -253,16 +256,25 @@ function spawn_handler() {
 					var launch_angle = current_turret.get_launch_angle();
 					var auto_projectile = new Auto_projectile(current_turret.x_center, current_turret.y_center, launch_angle);
 					field.projectile_list.push(auto_projectile);
-					ctx.drawImage(carnegie_mouth_inside, this.x + .48 * this.size, this.y + 1.4 * this.size,(this.size * 1.03), (this.size * .5));
-					ctx.drawImage(carnegie_mouth_top, this.x, this.y + 15, Math.floor(this.size * 2), Math.floor(this.size * 1.25));
-					ctx.drawImage(carnegie_mouth_bottom, this.x, this.y + 95, Math.floor(this.size * 2), Math.floor(this.size));
-					ctx.drawImage(paperBallImage, 1160, 150, 17, 17);
+					var carnegie_face = function(auto_turret) {
+						ctx.drawImage(carnegie_mouth_inside, auto_turret.x + .48 * auto_turret.size, auto_turret.y + 1.4 * auto_turret.size,(auto_turret.size * 1.03), (auto_turret.size * .5));
+						ctx.drawImage(carnegie_mouth_top, auto_turret.x, auto_turret.y + 15, Math.floor(auto_turret.size * 2), Math.floor(auto_turret.size * 1.25));
+						ctx.drawImage(carnegie_mouth_bottom, auto_turret.x, auto_turret.y + 95, Math.floor(auto_turret.size * 2), Math.floor(auto_turret.size));
+						ctx.drawImage(paperBallImage, 640, 100, 17, 17);
+					}
+					carnegie_face(current_turret);
+
 				}
 			}
 		}
 		else {
-			ctx.drawImage(carnegie_mouth_top, this.x, this.y + 15, Math.floor(this.size * 2), Math.floor(this.size * 1.25));
-			ctx.drawImage(carnegie_mouth_bottom, this.x, this.y + 77, Math.floor(this.size * 2), Math.floor(this.size));
+			for (var i = 0; i < field.turret_list.length; i++) {
+				var auto_turret = field.turret_list[i];
+				if (auto_turret.turret_type === "auto turret") {
+					ctx.drawImage(carnegie_mouth_top, auto_turret.x, auto_turret.y + 15, Math.floor(auto_turret.size * 2), Math.floor(auto_turret.size * 1.25));
+					ctx.drawImage(carnegie_mouth_bottom, auto_turret.x, auto_turret.y + 77, Math.floor(auto_turret.size * 2), Math.floor(auto_turret.size));
+				}
+			}
 			
 		}
 	}

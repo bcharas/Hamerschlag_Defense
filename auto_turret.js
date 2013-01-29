@@ -8,7 +8,8 @@ function Turret_placeholder(x, y){
 		if(this.timeout > 0){
 			ctx.fillStyle = '#ff0000';
 			this.timeout--;
-		} else {
+		} 
+		else {
 			ctx.fillStyle = "#551A8B"; //purple
 		}
 		ctx.fillRect(this.x, this.y, field.object_size, field.object_size);
@@ -71,6 +72,7 @@ function Auto_turret(x, y) {
 	
 	this.update_turret = function() {
 		ctx.drawImage(carnegie_mouth_top, this.x, this.y + 15, Math.floor(this.size * 2), Math.floor(this.size * 1.25));
+		//ctx.drawImage(carnegie_mouth_bottom, this.x, this.y + 77, Math.floor(this.size * 2), Math.floor(this.size));
 	}
 }
 

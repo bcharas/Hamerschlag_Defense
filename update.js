@@ -46,6 +46,10 @@ function update_all_health() {
 	for (var i = 0; i < field.health_list.length; i++) {
 		var this_health_bar = field.health_list[i];
 		var max_start_x = field.field_right - this_health_bar.width;
+		//graduate if they pass that?
+		if (this_health_bar.start_x >= max_start_x) {
+			field.health_list.splice(i, 1);
+		}		
 		this_health_bar.update_health_bar(i);	
 	}	
 }
@@ -62,16 +66,17 @@ function update_all_images() {
 
 
 function update_handler() {
-	update_all_projectiles();
-	player_turret.update_turret();
+	//update_all_projectiles();
+	//player_turret.update_turret();
 	player_turret.target.update_target();
 	//update_all_turrets();
 	update_all_obstructions();	
 	update_all_students();
 //<<<<<<< HEAD
 //=======
-	update_all_turrets();
 	update_all_turret_spots();
+	update_all_turrets();
+	
 	// Doherty is drawn here to put it on top of projectiles
 	for(var i = 0; i < 4; i++){
 		ctx.drawImage(dohertyImage, (400 * i) - 320, 670, 704, 231);

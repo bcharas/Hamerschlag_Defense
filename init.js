@@ -151,6 +151,7 @@ function init() {
 	field.pause_button = new pause_button();
 	field.obstruction_spawner = new obstruction_spawner(canvas.width - field.object_size * 4, field.object_size - field.font_size);
 	timer = setInterval(step, timerDelay);
+
 }
 
 function next_level(max_num_students) { 
@@ -158,7 +159,7 @@ function next_level(max_num_students) {
   timerDelay = 100;
   field = new Grid();
   player_turret = new Turret(canvas.width - 100, (canvas.height - 50)/2);
-  auto_turret_1 = new Auto_turret(.75 *  canvas.width, field.field_top / 3);
+  auto_turret_1 = new Auto_turret(640 - 25, 100 - 25);
   field.turret_list.push(player_turret);
   field.turret_list.push(auto_turret_1);
   first_student = new student(random_row());

@@ -32,7 +32,7 @@ function student(row) {
 	this.draw_student = function () {
 		ctx.drawImage(field.studentSprites, this.sprite_x, ((this.stand_or_walk % 4) * 120), 100, 120, this.x, this.y - (.15 * this.height), this.size, this.size);
 		this.stand_or_walk++;
-		ctx.strokeRect(this.x, this.y - (.15 * this.height), 250, this.size);
+		//ctx.strokeRect(this.x, this.y - (.15 * this.height), 250, this.size);
 	}
   
   //This function takes the number of projectiles in three consecutive 
@@ -46,7 +46,6 @@ function student(row) {
 				new_row = change_row_using_line_of_sight(this, this.row);
 				if (new_row !== this.row) {
 					if (can_change_rows(new_row, this)) {
-						console.log("dodge!");
 						this.dodge_cooldown = 5;
 						this.row = new_row;
 						this.size = field.student_height_for_a_row(this.row);
@@ -147,6 +146,7 @@ function should_graduate(index) {
 	if (student.x >= field.field_right) {
 		return true;	
 	}
+	return false;
 }
 
 //called when a student reaches the far right side of the field.
@@ -168,7 +168,6 @@ function graduate_student(student) {
 }
 
 function graduate_health_bar(health_bar) {
-	console.log("graduated");
 	var health_bar_index = field.health_list.indexOf(health_bar);
 	field.health_list.splice(health_bar_index, 1);
 

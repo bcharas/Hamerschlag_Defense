@@ -23,7 +23,6 @@ function place_obstruction(x, y) {
 					var next_row_height = field.row_heights[field.row_heights.length - 1 - i];
 					row_top = row_bottom;
 					row_bottom += next_row_height;
-					console.log("y: " + y)
 				}
 			}
 		}

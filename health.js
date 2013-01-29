@@ -24,6 +24,7 @@ function player_health() {
 }
 
 function student_health_bar(student) {
+	this.student = student;
 	this.current_health = student.health;
 	this.width = 1.25 * student.size;
 	this.height = .1 * student.size;
@@ -38,8 +39,8 @@ function student_health_bar(student) {
 		field.student_list.splice(student_index, 1);	
 	}
 	this.update_health_bar = function(health_index) {
-		this.start_x = student.x - (.125 * student.size);
-		this.start_y = student.y - (.15 * student.size);
+		this.start_x = this.student.x - (.125 * this.student.size);
+		this.start_y = this.student.y - (.15 * this.student.size);
 		if (this.current_health <= 0){
 			field.health_list.splice(health_index, 1);
 		}

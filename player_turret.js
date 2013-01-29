@@ -15,6 +15,8 @@ function onMouseDown(event) {
   }
   else { 
     var turretButton = -1
+	var turret_center_x = x + 50;
+	var turret_center_y = y + 50;
     for(var i = 0; i < field.turret_spots.length; i++){
 	  if(
 		x >= field.turret_spots[i].x &&
@@ -37,18 +39,20 @@ function onMouseDown(event) {
         x >= field.obstruction_spawner.x &&
         x <= (field.obstruction_spawner.x + field.obstruction_spawner.size) &&
         y >= field.obstruction_spawner.y &&
-        y <= (field.obstruction_spawner.y + field.obstruction_spawner.size)
-      ) {
+        y <= (field.obstruction_spawner.y + field.obstruction_spawner.size)) {
         if(field.money - field.books_cost >= 0){
-          field.obstruction_spawner.placing_mode = true;
-        } else {
+			field.obstruction_spawner.placing_mode = true;
+        } 
+		else {
           field.books_timeout = 20;
         }
       }
 	  else if(turretButton >= 0) {
 		if(field.money - field.turret_cost >= 0){
 			var buy_turret = field.turret_spots[turretButton];
-			field.turrets[field.turret_count++] = new Auto_turret(buy_turret.x, buy_turret.y);
+			//field.turrets[field.turret_count++] = new Auto_turret(buy_turret.x - 25, buy_turret.y - 25);
+			var new_auto_turret = new Auto_turret(buy_turret.x - 25, buy_turret.y - 25);
+			field.turret_list.push(new_auto_turret);
 			field.turret_spots.splice(turretButton, 1);
 			field.money -= field.turret_cost;
 		} else {
@@ -198,7 +202,6 @@ function Target(x, y) {
 //colliding student is also despawned.
 function collide(projectile_index, student_index) {
 	var student = field.student_list[student_index];
-	console.log(field.student_list[student]);
 	var projectile = field.projectile_list[projectile_index];
 
 	field.projectile_list.splice(projectile_index, 1);
