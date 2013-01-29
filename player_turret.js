@@ -95,7 +95,20 @@ function Projectile(launch_x, launch_y, target_x, target_y) {
 			}				
 		}
 		//this.check_for_row_change();
-		this.row = Math.floor((this.y - field.field_top) / field.row_height);
+		var row_top = field.field_top;
+		var row_bottom = row_top + field.row_heights[field.row_heights.length - 1];
+		for (var i = 1; i < field.num_rows; i++) {
+				if ((y >= row_top) && (y < row_bottom)) { //I suppose, in rare case of tie, bias to upper row
+						this.row = (i - 1);
+						break;
+				}
+				else {
+					var next_row_height = field.row_heights[field.row_heights.length - 1 - i];
+					row_top = row_bottom;
+					row_bottom += next_row_height;
+				}
+			}
+		//this.row = Math.floor((this.y - field.field_top) / field.row_height);
 		ctx.fillStyle = "#551A8B"; //purple
 		ctx.fillRect(this.x, this.y, this.size, this.size);
 		ctx.strokeRect(this.x, this.y, this.size, this.size);
@@ -149,7 +162,9 @@ function collide(projectile_index, student_index) {
 	field.projectile_list.splice(projectile_index, 1);
 	
 	student.health_bar.current_health -= projectile.damage;
+	student.health_bar.current_health = Math.max(0, student.health_bar.current_health);
 	student.health -= projectile.damage; 
+	student.health = Math.max(0, student.health);
 	
 	if (student.health_bar.current_health <= 0) {
 		field.student_list.splice(student_index, 1);

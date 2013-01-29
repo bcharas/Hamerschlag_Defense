@@ -52,9 +52,9 @@ function student_health_bar(student) {
 
 function obstruction_health(obstruction) {
 	this.current_health = obstruction.health;
-	this.width = 1.25 * obstruction.size;
+	this.width = .75 * obstruction.size;
 	this.height = .1 * obstruction.size;
-	this.start_x = obstruction.x - (.25 * obstruction.size);
+	this.start_x = obstruction.x - (.125 * obstruction.size);
 	this.start_y = obstruction.y - (.15 * obstruction.size);
 	this.name = String(field.healths_recorded);
 	field.healths_recorded++;

@@ -15,6 +15,19 @@ function field_size_info(field) {
 	field.row_width = field.field_width;
 	field.mid_x = field.field_width / 2;
 	field.mid_y = (field.field_bottom - field.field_top) / 2;
+	field.ratio_of_row_to_next_row_behind = .8;
+	field.height_sum = 0;
+	for (var i = 0; i < field.num_rows; i++) {
+		field.height_sum += Math.pow(field.ratio_of_row_to_next_row_behind, i);	
+	}
+	field.max_row_height = field.field_height / field.height_sum;
+	//console.log(field.max_row_height);
+	field.row_heights = [ ];
+	for (var i = 0; i < field.num_rows; i++) {
+		var this_size_ratio = Math.pow(field.ratio_of_row_to_next_row_behind, i);
+		field.row_heights.push(field.max_row_height * this_size_ratio);	
+	}
+	//console.log(field.row_heights);
 }
 
 function color_pallete(field) {
@@ -46,12 +59,63 @@ function game_info(field) {
 	field.ending_sequence_length = 10;
 }
 
+function images(field) {
+	field.image_list = [ ];
+	
+	field.turretImage = new Image();
+	field.image_list.push(field.turretImage);
+	field.turretImage.src = "hamerschlag.png";
+	field.turretImage.draw = function () {
+		ctx.drawImage(field.turretImage, 1200, 125, 417, 578);	
+		console.log("D");
+	}
+
+	field.skyImage = new Image();
+	field.image_list.push(field.skyImage);
+	field.skyImage.src = 'sky.jpg';
+	field.skyImage.draw = function () {
+		ctx.drawImage(field.skyImage, 0, 0);	
+	}
+	
+	field.grassImage = new Image();
+	field.image_list.push(field.grassImage);
+	field.grassImage.src = 'grass.jpg';
+	field.grassImage.draw = function () {
+		ctx.drawImage(field.grassImage, 0, 200, field.field_width, 550);	
+	}
+	
+	field.bakerImage = new Image();
+	field.image_list.push(field.bakerImage);
+	field.bakerImage.src = 'baker.png';
+	field.bakerImage.draw = function () {
+		ctx.drawImage(field.bakerImage, -230, 44, 1600, 180);	
+	}
+	
+	field.dohertyImage = new Image();
+	field.image_list.push(field.dohertyImage);
+	field.dohertyImage.src = 'doherty.png';
+	field.dohertyImage.draw = function () {
+		for (var i = 0; i < 4; i++){
+			ctx.drawImage(field.dohertyImage, (400 * i) - 320, 670, 704, 231);	
+		}
+	}
+	
+	field.studentSprites = new Image();
+	//field.image_list.push(field.studentSprites);
+	field.studentSprites.src = "spriteSheet.png";
+	//field.studentSprites.draw = function () {
+	//	ctx.drawImage(field.studentSprites, 1200, 125, 417, 578);	
+	//}
+
+
+}
+
 //This function sets up the parameters for the "game field" i.e. the space 
 //enemies (called students) approach through.
 //It is divided into "rows", which are paths on which a student is spawned, 
 //and the student moves along to reach their goal at the right side of the player screen.
 function Grid() {
-	this.turretImage = new Image();
+	images(this);
 	color_pallete(this);
 	field_size_info(this);
 	game_info(this);	
@@ -75,20 +139,32 @@ function no_students_on_grid_at_end_of_level() {
 }
 
 //draws the game background and rows that the students approach along
-function make_field() {
-	var sky_color = "#00ccFF";
-	ctx.fillStyle = sky_color;
-	ctx.fillRect(0, 0, canvas.width, canvas.height);
-	var skyImage = new Image();
-	skyImage.src = 'sky.jpg';
-	ctx.drawImage(skyImage, 0, 0);
-	//ctx.fillStyle = field.ground_color;
-	ctx.fillStyle = "#78AB46";
-	ctx.fillRect(field.field_left, field.field_top, field.field_width, field.field_height);
-	ctx.fillStyle = "#000000";
+function make_field() { 
+	ctx.drawImage(field.skyImage, 0, 0);
+	ctx.drawImage(field.grassImage, 0, 200, field.field_width, 550);
 	for (var i = 0; i < field.num_rows; i++) {
-		ctx.strokeRect(field.field_left, (field.field_top + (field.row_height * i)), field.field_width, field.row_height);	
+		var start_y = field.field_top;
+		for (var j = 0; j < i; j++) {
+			start_y += field.row_heights[field.row_heights.length - 1 - j];
+		}
+		ctx.fillStyle = "#000000";
+		ctx.strokeStyle = "#000000";
+		var this_row_height =  field.row_heights[field.num_rows - 1 - i];
+		ctx.strokeRect(field.field_left, start_y, field.field_width, this_row_height);
 	}
+
+	
+
+//<<<<<<< HEAD
+//=======
+	ctx.drawImage(field.bakerImage, -230, 44, 1600, 180);
+	ctx.drawImage(field.turretImage, 1200, 125, 417, 578);
+	for(var i = 0; i < 4; i++){
+		ctx.drawImage(field.dohertyImage, (400 * i) - 320, 670, 704, 231);
+	}
+	
+	//ctx.drawImage(field.turretImage, 1190, 180, 417, 578);
+//>>>>>>> 300e9a8638e6eabf4b54ee30cee8f9f7d97ea85b
 }
 
 
@@ -96,7 +172,6 @@ function make_field() {
 //player target) on an interval
 function spawn_handler() {
 	if ((field.ending_sequence === false) && (pausingForTransition === false)) {
-	//if (pausingForTransition === false) {
 		if (field.students_seen <= max_students_on_this_level){
 			field.time_until_student_spawn -= timerDelay;
 			player_turret.time_between_shots_fired -= timerDelay;
@@ -106,6 +181,7 @@ function spawn_handler() {
 			
 			field.time_until_student_spawn = field.max_time_until_student_spawn;
 			var mob = new student(random_row());
+			//var mob = new student(0);
 			field.student_list.push(mob);
 		}
 		if (player_turret.time_between_shots_fired  <= 0) {

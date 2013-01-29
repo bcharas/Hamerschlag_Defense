@@ -50,6 +50,13 @@ function update_all_health() {
 	}	
 }
 
+function update_all_images() {
+	for (var i = 0; i < field.image_list.length; i++) {
+		var this_image = field.image_list[i];
+		this_image.draw();	
+	}
+}
+
 
 
 
@@ -61,7 +68,10 @@ function update_handler() {
 	update_all_turrets();
 	player_turret.update_turret();
 	player_turret.target.update_target();
-	field.turretImage.src = "hamerschlag.png";
-	ctx.drawImage(field.turretImage, 1190, 210);
+	//update_all_images();
+	
+	//field.turretImage.src = "hamerschlag.png";
+	//ctx.drawImage(field.turretImage, 1190, 210);
+	
 	update_all_health();
 }
