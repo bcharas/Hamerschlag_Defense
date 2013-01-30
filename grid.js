@@ -222,6 +222,7 @@ function spawn_handler() {
 			for (var i = 0; i < field.turret_list.length; i++){			
 				var current_turret = field.turret_list[i];		
 				if (current_turret.turret_type === "controlled turret") {
+					//console.log("oi!");
 					var projectile = new Projectile(current_turret.x_center, current_turret.y_center, current_turret.target.x, current_turret.target.y);
 					field.projectile_list.push(projectile);					
 				}
