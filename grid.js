@@ -96,7 +96,7 @@ function images(field) {
 	field.booksImage.src = 'books.png';
 	
 	field.studentSprites = new Image();
-	field.studentSprites.src = "spriteSheet.png";
+	field.studentSprites.src = "sprite_sheet.png";
 	
 
 
