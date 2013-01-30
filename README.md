@@ -26,10 +26,10 @@ Carnegie Mellon seal image:
 http://upload.wikimedia.org/wikipedia/en/b/bb/Carnegie_Mellon_University_seal.svg
 
 Andrew Carnegie open mouth image:
-
+http://thumb11.shutterstock.com/thumb_small/451498/451498,1316446370,5/stock-photo-illustration-uvula-in-the-throat-close-up-84936112.jpg
 
 No symbol image:
-
+http://marmysz.files.wordpress.com/2012/10/nosymbol.gif
 
 Sky image:
 http://www.allabouthappylife.com/wallpaper/dual_monitor/sky/beautiful_sky-dsc01468-dws.jpg
