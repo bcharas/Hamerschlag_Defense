@@ -203,10 +203,6 @@ function main_menu() {
   ctx.fillText("Hamerschlag Defense", canvas.width / 2, canvas.height / 6, 
               canvas.width / 2, canvas.height / 2);
   for (var i = 0; i < 6; i++) {
-    var width = (i === 1) ? 110 : 125; 
-    //ctx.drawImage(studentSprites, 24 + 110 * i, 120, width, 120, 
-      //(i + 1) * canvas.width / 7, 
-      //3 * canvas.height / 4, canvas.height / 8, canvas.height / 8);
 	ctx.drawImage(studentSprites, i * 120, 120, 120, 120, i * canvas.width / 8 + 200, canvas.height * 0.72, 120, 120);
   }
   load_images();
