@@ -155,6 +155,11 @@ function Grid() {
 		return y;
 	}
 	
+	this.turret_spots = [];
+	for(var i = 0; i < 3; i++){
+		this.turret_spots.push(new Turret_placeholder(i * 376 + 264, 100));
+	}
+	this.turret_cost = 400;
 }
 
 function no_students_on_grid_at_end_of_level() {
@@ -178,14 +183,8 @@ function make_field() {
 		var this_row_height =  field.row_heights[field.num_rows - 1 - i];
 		ctx.strokeRect(field.field_left, start_y, field.field_width, this_row_height);
 	}
-	ctx.drawImage(field.bakerImage, -230, 44, 1600, 180);
-	update_all_projectiles();
-	update_all_turrets();		
-	ctx.drawImage(field.turretImage, 1200, 125, 417, 578);
-	for(var i = 0; i < 4; i++){
-		ctx.drawImage(field.dohertyImage, (400 * i) - 320, 670, 704, 231);
-	}
-
+	ctx.drawImage(bakerImage, -230, 44, 1600, 180);
+	ctx.drawImage(hamerschlagImage, 1190, 180, 417, 578);
 }
 
 
@@ -216,9 +215,7 @@ function spawn_handler() {
 				field.time_until_student_spawn = 4000;
 			}
 			var mob = new student(random_row());
-			//console.log(mob);
 			field.student_list.push(mob);
-			//console.log(field.student_list);
 		}
 		if (player_turret.time_between_shots_fired  <= 0) {
 			player_turret.time_between_shots_fired = 1000;

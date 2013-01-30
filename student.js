@@ -62,16 +62,12 @@ function student(row) {
 			}
 			else {
 				this.dodge_cooldown -= 1;
-				console.log(this.dodge_cooldown);
-				//this.x += this.speed;
 			}
 		}
 		if (this.dodge_cooldown !== 5) {
-			//console.log("24601");
 			this.dodge_cooldown -= 1;
 			if ((this.x + this.size) < field.field_right) {
 				var should_move = true;
-				//this.x += this.speed;
 				student_obstruction_collision_check(this);
 				if (should_move === true) {
 					this.x += this.speed;

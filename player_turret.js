@@ -6,15 +6,29 @@ canvas.addEventListener('mousedown', onMouseDown, false);
 function onMouseDown(event) {
   var x = event.pageX - canvas.offsetLeft;
   var y = event.pageY - canvas.offsetTop;
-  //console.log(String(x) + " " + String(y));
   if (displayingMainMenu === true) {
-    if ((x >= canvas.width / 2) && (x <= ((canvas.width / 2) + 100)) &&
-     (y >= 7 * canvas.height / 8) && (y <= (7 * canvas.height / 8) + 100)) {
+    if (
+		x >= start.x &&
+		x <= start.x + start.size &&
+		y >= start.y &&
+		y <= start.y + start.size
+	) {
       displayingMainMenu = false;
       next_level(num_students_on_first_level);
     } 
   }
   else { 
+    var turretButton = -1
+    for(var i = 0; i < field.turret_spots.length; i++){
+	  if(
+		x >= field.turret_spots[i].x &&
+        x <= (field.turret_spots[i].x + field.object_size) &&
+        y >= field.turret_spots[i].y &&
+        y <= (field.turret_spots[i].y + field.object_size)
+	  ){
+		turretButton = i;
+	  }
+    }
     field.button_check(x, y);
     if ((field.game_is_over === false) && (field.paused === false)) {
       if (field.obstruction_spawner.placing_mode === true) {
@@ -35,6 +49,16 @@ function onMouseDown(event) {
           field.books_timeout = 20;
         }
       }
+	  else if(turretButton >= 0) {
+		if(field.money - field.turret_cost >= 0){
+			var buy_turret = field.turret_spots[turretButton];
+			field.turrets[field.turret_count++] = new Auto_turret(buy_turret.x, buy_turret.y);
+			field.turret_spots.splice(turretButton, 1);
+			field.money -= field.turret_cost;
+		} else {
+			field.turret_spots[turretButton].timeout = 20;
+		}
+	  }
       else if (
         x < field.pause_button.x ||
         x > (field.pause_button.x + field.pause_button.size) ||
@@ -49,7 +73,7 @@ function onMouseDown(event) {
 			}
       }
     }	
-  }	
+  }
 }
 
 
