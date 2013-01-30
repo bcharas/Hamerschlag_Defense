@@ -32,7 +32,6 @@ function student(row) {
 	this.draw_student = function () {
 		ctx.drawImage(field.studentSprites, this.sprite_x, ((this.stand_or_walk % 4) * 120), 100, 120, this.x, this.y - (.15 * this.height), this.size, this.size);
 		this.stand_or_walk++;
-		ctx.strokeRect(this.x, this.y - (.15 * this.height), 250, this.size);
 	}
   
   //This function takes the number of projectiles in three consecutive 
