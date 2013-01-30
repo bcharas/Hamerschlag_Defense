@@ -180,17 +180,17 @@ function load_images() {
 	dohertyImage = new Image();
 	dohertyImage.src = 'doherty.png';
 	paperBallImage = new Image();
-	paperBallImage.src = "crumpled-paper.png";
+	paperBallImage.src = "crumpled_paper.png";
 	carnegieImage = new Image();
-	carnegieImage.src = "Carnegie.png";
+	carnegieImage.src = "carnegie.png";
 	targetImage = new Image();
-	targetImage.src = "CarnegieMellonSeal.gif";
+	targetImage.src = "carnegie_mellon_seal.gif";
 	noSymbol = new Image();
-	noSymbol.src = "NoSymbol.gif";
+	noSymbol.src = "no_symbol.gif";
 	carnegie_mouth_top = new Image();
-	carnegie_mouth_top.src = "Carnegie_open_mouth_top.gif";
+	carnegie_mouth_top.src = "carnegie_open_mouth_top.gif";
 	carnegie_mouth_bottom = new Image();
-	carnegie_mouth_bottom.src = "Carnegie_open_mouth_bottom.gif";
+	carnegie_mouth_bottom.src = "carnegie_open_mouth_bottom.gif";
 	carnegie_mouth_inside = new Image();
 	carnegie_mouth_inside.src = "inside_mouth.jpg";
 
@@ -206,7 +206,6 @@ function main_menu() {
 	ctx.drawImage(studentSprites, i * 120, 120, 120, 120, i * canvas.width / 8 + 200, canvas.height * 0.72, 120, 120);
   }
   load_images();
-  /////////
 	function start_button() {
 	  this.size = 100;
 	  this.x = canvas.width / 2 - this.size / 2;
@@ -258,9 +257,9 @@ function play_game(num_levels, num_students_first_level) {
   max_num_levels = num_levels;
   displayingMainMenu = true;
   studentSprites = new Image();
-  studentSprites.src = "spriteSheet.png";
+  studentSprites.src = "sprite_sheet.png";
   hamerschlagMenuImage = new Image();
-  hamerschlagMenuImage.src = "Hamerschlag_front.jpg";
+  hamerschlagMenuImage.src = "hamerschlag_front.jpg";
   hamerschlagMenuImage.onload = function() {
     main_menu();
   }
