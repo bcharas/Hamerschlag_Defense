@@ -103,8 +103,9 @@ function step() {
 			ctx.fillRect(0, 0, canvas.width, canvas.height);
 			ctx.fillStyle = "#FFFFFF";
 			ctx.font = "50px Arial";
+			ctx.textAlign = "center";
 			ctx.fillText("Another semester comes to a close...", canvas.width /2, canvas.height / 3);
-			ctx.fillText("... But can you last another?", canvas.width * .65, (canvas.height / 3) + 100);
+			ctx.fillText("... But can you last another?", canvas.width / 2, (canvas.height / 3) + 100);
 		}
 		else {
 		  pausingForTransition = false;
@@ -279,4 +280,4 @@ function play_game(num_levels, num_students_first_level) {
   }
 }
 
-play_game(1, 1);
+play_game(5, 7);
