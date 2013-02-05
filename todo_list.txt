@@ -1,0 +1,19 @@
+COMPLETED BY BEN obstructions (player placed blocks to slow down student movement)
+turret movement on player command (not sure if we want this)
+COMPLETED implement images (i.e. replace existing rectangles with any art we have)
+COMPLETED main menu
+scalability to window
+player abilities (designing and implementing)
+turret firing upgrades (e.g. shooting 2 shots off to the side for every one shot straight)
+implement accumulation of upgrade currency from currency providing objects (like the sun from sunflowers in plants vs zombies, look it up if you don't know what I mean)
+"Lawn mowers" from plants vs. zombies: every time a row is breaches (aka a student graduating) for the first time in a round, clear that row of any students already in it
+eliminate lines between rows? Might look better, same functionality
+COMPLETED student spawn cap for a round (e.g. level n has no more than k total students that can spawn)
+COMPLETED story writeup (basic paragraph to establish the theme when the player starts the game)
+night-time mode (for abilities or maybe certain levels). In other words, make the board darker except for certain "lit" areas, maybe around each student, turret, and some hard coded streetlights
+special turret abilities. a special turret projectile could call a pre-set function upon impact, e.g. one that temporarily slows the student it hit
+add a color pallete  file or object to hold all of the color values we use, so that we can find them all easily to change them. Also will help make sure we use the same colors every time we try to.
+COMPLETED add a framework for levels: a function that takes in certain parameters (like spawn cap) and then immediately starts a level with those parameters (this function would be called before init before each round)
+health buff spawns? Temporary randomly placed objects that if shot give you health, score, or some kind of buff?
+Once we have most/all of the above: minigames
+
