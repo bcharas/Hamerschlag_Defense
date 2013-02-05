@@ -1,3 +1,7 @@
+//Ben Charas, bcharas
+//Jack Paparian, jpaparia
+//Russell Tucker, rtucker
+
 function spawn_timer() {
 	ctx.fillStyle = "#000000";
 	ctx.font = "20px Arial";
@@ -60,9 +64,35 @@ function step() {
 		spawn_timer();
 		pause_handler();
 		field.obstruction_spawner.update();
+		
+		update_all_turret_spots();
+		
+		
+		for (var i = 0; i < field.turret_list.length; i++){			
+			var current_turret = field.turret_list[i];	
+			var carnegie_face = function(auto_turret) {
+				ctx.drawImage(carnegie_mouth_inside, auto_turret.x + .48 * auto_turret.size, auto_turret.y + 1.4 * auto_turret.size,(auto_turret.size * 1.03), (auto_turret.size * .5));
+				ctx.drawImage(carnegie_mouth_top, auto_turret.x, auto_turret.y + 15, Math.floor(auto_turret.size * 2), Math.floor(auto_turret.size * 1.25));
+				ctx.drawImage(carnegie_mouth_bottom, auto_turret.x, auto_turret.y + 77, Math.floor(auto_turret.size * 2), Math.floor(auto_turret.size));
+				//ctx.drawImage(paperBallImage, 640, 100, 17, 17);
+			}
+			if (current_turret.turret_type === "auto turret") {
+				carnegie_face(current_turret);
+			}
+		}
+		update_money();
 		field.ending_sequence_length -= 1;
 		if (field.ending_sequence_length === 0) {
 			field.ending_sequence = false;
+			num_levels_played++;
+			if (num_levels_played >= max_num_levels) {
+			  ctx.fillStyle = "rgba(0, 0, 0, .5)";
+			  ctx.fillRect(0, 0, canvas.width, canvas.height);
+			  ctx.fillStyle = "#FFFFFF";
+			  ctx.font = "50px Arial";
+			  ctx.textAlign = "center";
+			  //ctx.fillText("You've defeated the students' will to party! ", canvas.width / 2, canvas.height / 2); 
+			}			
 			pausingForTransition = true;
 		}
 	}
@@ -71,14 +101,17 @@ function step() {
 			field.pause_timer++;
 			ctx.fillStyle = "rgba(0, 0, 0, .5)";
 			ctx.fillRect(0, 0, canvas.width, canvas.height);
-	ctx.fillText("Another semester comes to a close...", canvas.width / 2, canvas.height / 2);
+			ctx.fillStyle = "#FFFFFF";
+			ctx.font = "50px Arial";
+			ctx.fillText("Another semester comes to a close...", canvas.width /2, canvas.height / 3);
+			ctx.fillText("... But can you last another?", canvas.width * .65, (canvas.height / 3) + 100);
 		}
 		else {
 		  pausingForTransition = false;
 		  field.pause_timer = 0;
 		  var max_students_on_next_level = Math.floor(max_students_on_this_level + 1.5 * num_levels_played);
 		  clearInterval(timer);
-		  next_level(max_students_on_next_level);
+		  next_level(max_students_on_next_level, field.money);
 		}
 	}
 	else { 
@@ -94,8 +127,7 @@ function step() {
 			  ctx.fillStyle = "#FFFFFF";
 			  ctx.font = "50px Arial";
 			  ctx.textAlign = "center";
-			  ctx.fillText("You've defeated the student " + 
-						  "body!", canvas.width / 2, canvas.height / 2); 
+			  //ctx.fillText("You've defeated the students' will to party! ", canvas.width / 2, canvas.height / 2); 
 			}
 			else {
 			  pausingForTransition = true;
@@ -135,7 +167,7 @@ function end_game() {
 	ctx.fillStyle = "#FFFFFF";
 	ctx.font = "50px Arial";
 	ctx.textAlign = "center";
-	ctx.fillText("Game Over", canvas.width / 2, canvas.height / 2);
+	ctx.fillText("You've failed as a professor; the students are now at PHI bar.", canvas.width / 2, canvas.height / 2);
 
 
 }
@@ -154,7 +186,7 @@ function init() {
 
 }
 
-function next_level(max_num_students) { 
+function next_level(max_num_students, your_money) { 
 //Below are some necessary globals for this to function.
   timerDelay = 100;
   field = new Grid();
@@ -165,6 +197,7 @@ function next_level(max_num_students) {
   first_student = new student(random_row());
   field.student_list.push(first_student);
   field.health_list.push(first_student.health_bar);
+  field.money = your_money;
   max_students_on_this_level = max_num_students;
   init();
 }
@@ -199,6 +232,7 @@ function load_images() {
 
 function main_menu() {
   ctx.drawImage(hamerschlagMenuImage, 0, 0, canvas.width, canvas.height);
+  ctx.drawImage(instructionImage, canvas.width/4, canvas.height/5, canvas.width/2, canvas.height/2);
   ctx.font = "70px Arial";
   ctx.textAlign = 'center';
   ctx.fillText("Hamerschlag Defense", canvas.width / 2, canvas.height / 6, 
@@ -207,46 +241,19 @@ function main_menu() {
 	ctx.drawImage(studentSprites, i * 120, 120, 120, 120, i * canvas.width / 8 + 200, canvas.height * 0.72, 120, 120);
   }
   load_images();
-  /////////
 	function start_button() {
 	  this.size = 100;
-	  this.x = canvas.width / 2;
+	  this.x = canvas.width / 2 - this.size / 2;
 	  this.y = 7 * canvas.height / 8;
 	  this.funct = function () { 
 		next_level(num_students_on_first_level);
 	  }
 	  Button(this, this.funct, false);
 	}
-	
-	function Button(button, funct, default_position) {
-	button.funct = funct;
-	button.default_position = default_position;
-	button.position = button.default_position;
-	button.color = "#000000";
-	button.inverted_color = "#ffffff";
-	button.press = function() {
-		if (field.game_is_over === false) {
-			button.funct();
-			button.position = !button.position;
-			button.update_button();
-		}
-	}
-	button.update_button = function() {
-		//if (field.game_is_over === false) {
-			if (button.position === button.default_position) {
-				ctx.fillStyle = button.color;
-			}
-			else {
-				ctx.fillStyle = button.inverted_color;
-			}
-			ctx.fillRect(button.x - button.size * 0.75, button.y, button.size * 1.5, button.size);
-		}
-	}
-///////// THESE PROBABLY SHOULDN'T HAVE TO BE HERE.	
+
   
   
   start = new start_button();
-  //console.log(start);
   start.update_button();
   ctx.font = "30px Arial";
 	ctx.fillStyle = "#FFFFFF";
@@ -263,6 +270,8 @@ function play_game(num_levels, num_students_first_level) {
   displayingMainMenu = true;
   studentSprites = new Image();
   studentSprites.src = "spriteSheet.png";
+  instructionImage = new Image();
+  instructionImage.src = "Instruction_Page.png";
   hamerschlagMenuImage = new Image();
   hamerschlagMenuImage.src = "Hamerschlag_front.jpg";
   hamerschlagMenuImage.onload = function() {
@@ -270,4 +279,4 @@ function play_game(num_levels, num_students_first_level) {
   }
 }
 
-play_game(4, 16);
+play_game(1, 1);

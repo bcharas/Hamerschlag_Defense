@@ -67,6 +67,7 @@ function destroy_obstruction(obstruction_index) {
 function obstruction_spawner(x, y){
 	this.x = x;
 	this.y = y;
+
 	this.size = field.object_size;
 	this.placing_mode = false;
 	this.update = function() {
@@ -77,7 +78,7 @@ function obstruction_spawner(x, y){
 		}
 		else if (this.placing_mode === false) {
 			ctx.fillStyle = "#000000";
-			var books_text = "Buy books";
+			var books_text = "Buy books for $" + String(field.books_cost) + "K";
 		}
 		else {
 			ctx.fillStyle = "#ffffff";
@@ -87,5 +88,7 @@ function obstruction_spawner(x, y){
 		ctx.fillText(books_text, canvas.width - field.object_size * 3.5, field.object_size + this.size);
 		ctx.fillRect(this.x, this.y, this.size, this.size);
 		ctx.strokeRect(this.x, this.y, this.size, this.size);
+		ctx.fillStyle = "#FFFFFF";
+		ctx.fillText("$" + String(field.books_cost) + "K", this.x + this.size/2, this.y + this.size/2);
 	}
 }

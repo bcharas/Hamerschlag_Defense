@@ -7,10 +7,14 @@ function onMouseDown(event) {
   var x = event.pageX - canvas.offsetLeft;
   var y = event.pageY - canvas.offsetTop;
   if (displayingMainMenu === true) {
-    if ((x >= canvas.width / 2) && (x <= ((canvas.width / 2) + 100)) &&
-     (y >= 7 * canvas.height / 8) && (y <= (7 * canvas.height / 8) + 100)) {
+    if (
+		(x >= start.x) &&
+		(x <= start.x + start.size) &&
+		(y >= start.y) &&
+		(y <= start.y + start.size)
+	 ) {
       displayingMainMenu = false;
-      next_level(num_students_on_first_level);
+      next_level(num_students_on_first_level, 50);
     } 
   }
   else { 

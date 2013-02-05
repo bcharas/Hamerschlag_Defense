@@ -121,7 +121,7 @@ function Grid() {
 	}
 	this.obstruction_spawner = undefined;
 	object_storage_lists(this);
-	this.money = 100000;
+	this.money = 50;
 	this.books_cost = 75;
 	this.books_timeout = 0;
 	this.font_size = 20;
@@ -187,27 +187,12 @@ function make_field() {
 		var this_row_height =  field.row_heights[field.num_rows - 1 - i];
 		ctx.strokeRect(field.field_left, start_y, field.field_width, this_row_height);
 	}
-/* <<<<<<< HEAD
-	ctx.drawImage(field.bakerImage, -230, 44, 1600, 180);
-	update_all_projectiles();
-	update_all_turrets();		
-	ctx.drawImage(field.turretImage, 1200, 125, 417, 578);
-	for(var i = 0; i < 4; i++){
-		ctx.drawImage(field.dohertyImage, (400 * i) - 320, 670, 704, 231);
-	}
-
-=======*/
-	//var bakerImage = new Image();
-	//bakerImage.src = 'baker.png';
 	ctx.drawImage(bakerImage, -230, 44, 1600, 180);
-	//field.turretImage.src = "hamerschlag.png";
-	//ctx.drawImage(field.turretImage, 1190, 180, 417, 578);
 	player_turret.update_turret();
+	player_turret.target.update_target();
+	update_all_turrets();
 	update_all_projectiles();
 	ctx.drawImage(hamerschlagImage, 1190, 180, 417, 578);
-	//var dohertyImage = new Image();
-	//dohertyImage.src = 'doherty.png';
-//>>>>>>> d7d923849a10a0905be46e4de77bfe544889b432
 }
 
 
@@ -260,7 +245,7 @@ function spawn_handler() {
 						ctx.drawImage(carnegie_mouth_inside, auto_turret.x + .48 * auto_turret.size, auto_turret.y + 1.4 * auto_turret.size,(auto_turret.size * 1.03), (auto_turret.size * .5));
 						ctx.drawImage(carnegie_mouth_top, auto_turret.x, auto_turret.y + 15, Math.floor(auto_turret.size * 2), Math.floor(auto_turret.size * 1.25));
 						ctx.drawImage(carnegie_mouth_bottom, auto_turret.x, auto_turret.y + 95, Math.floor(auto_turret.size * 2), Math.floor(auto_turret.size));
-						ctx.drawImage(paperBallImage, 640, 100, 17, 17);
+						//ctx.drawImage(paperBallImage, 640, 100, 17, 17);
 					}
 					carnegie_face(current_turret);
 

@@ -68,14 +68,15 @@ function update_all_images() {
 function update_handler() {
 	//update_all_projectiles();
 	//player_turret.update_turret();
-	player_turret.target.update_target();
+	//player_turret.target.update_target();
 	//update_all_turrets();
 	update_all_obstructions();	
 	update_all_students();
+	ctx.drawImage(hamerschlagImage, 1190, 180, 417, 578);
 //<<<<<<< HEAD
 //=======
 	update_all_turret_spots();
-	update_all_turrets();
+	//update_all_turrets();
 	
 	// Doherty is drawn here to put it on top of projectiles
 	for(var i = 0; i < 4; i++){

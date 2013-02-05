@@ -1,6 +1,7 @@
 function Turret_placeholder(x, y){
 	this.x = x;
 	this.y = y;
+	this.size = 50;
 	if(this.timeout === undefined){
 		this.timeout = 0;
 	}
